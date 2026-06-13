@@ -1,0 +1,260 @@
+{
+    "research_title": "Mandala Garden Branding Research",
+    "project_description": {
+        "location": "Ulaanbaatar, Mongolia (Yarmag – Arcatsin valley)",
+        "site_size": "10 hectares",
+        "components": [
+            "14 residential blocks",
+            "School",
+            "Kindergarten",
+            "Retail and service areas",
+            "Extensive green spaces",
+            "Interactive AWT (Animal, Water, Tree) themed park"
+        ],
+        "concept": "An ecologically integrated residential complex emphasizing harmony with nature via the AWT concept: Animal, Water and Tree."
+    },
+    "brand_meaning": {
+        "mandala": {
+            "definition": "Sanskrit word meaning circle, wholeness and balance.",
+            "values": [
+                "balance",
+                "whole",
+                "focus",
+                "interconnectedness"
+            ]
+        },
+        "garden": {
+            "definition": "Represents nature, healthy living and a peaceful environment.",
+            "values": [
+                "nature",
+                "growth",
+                "peace",
+                "sanctuary"
+            ]
+        },
+        "AWT_concept": {
+            "acronym": "Animal, Water, Tree",
+            "meaning": "Living in harmony with animals, water and trees within the development."
+        }
+    },
+    "color_palette_basic": {
+        "primary_colors": {
+            "Green (AWT Tree)": "Nature, growth potential, healthy living",
+            "Blue (Water)": "Clean water, calm, trust",
+            "Warm Earth / Ochre": "Human focus, positive energy",
+            "Soft White / Ivory": "Luxury, purity, spaciousness",
+            "Charcoal / Graphite": "Modern, premium atmosphere"
+        }
+    },
+    "typography_basic": {
+        "primary_font": {
+            "style": "Sans-serif, modern and clean",
+            "examples": [
+                "Montserrat",
+                "Poppins",
+                "Inter"
+            ],
+            "use": "Headlines and main messaging"
+        },
+        "secondary_font": {
+            "style": "Serif, elegant accent",
+            "examples": [
+                "Playfair Display",
+                "Lora"
+            ],
+            "use": "Headings, slogans"
+        },
+        "slogan": "Гэр бүлдээ үлдээх үнэ цэнтэй хөрөнгө оруулалт"
+    },
+    "brand_elements": {
+        "mandala_motif": "Circular mandala pattern symbolizing focus and balance, used as decorative element.",
+        "natural_icons": [
+            "Tree",
+            "Water wave",
+            "Animal icons"
+        ],
+        "landscape_shapes": "Design elements inspired by the slopes of the Yarmag–Arcatsin valley."
+    },
+    "mood_and_tone": {
+        "feelings": [
+            "Harmony with nature",
+            "Premium and luxurious",
+            "Healthy and clean living",
+            "Family and child friendly",
+            "Balanced and inspiring"
+        ],
+        "visual_style": [
+            "Photos of nature, trees, water and gardens",
+            "Lifestyle images with daytime and evening light",
+            "Photorealistic modern architecture"
+        ]
+    },
+    "additional_ideas": {
+        "gradient_theme": "Green → Blue → Earth smooth gradients",
+        "pattern_overlay": "Subtle mandala motif texture used as background overlay",
+        "emphasis_scenes": [
+            "Children",
+            "Families",
+            "Nature",
+            "Starry night visuals"
+        ],
+        "icon_set": [
+            "Tree",
+            "Water",
+            "Animal"
+        ]
+    },
+    "usage_examples": {
+        "slogan_header": {
+            "text": "Мандала Гарден — Байгальтай зохицсон амьдрах орчин",
+            "colors": {
+                "main": "Green",
+                "accent": "Blue",
+                "secondary": "Warm Earth"
+            }
+        },
+        "brochure_social_post_layout": {
+            "header": "Mandala motif + Charcoal",
+            "copy_background": "Soft White with Green accents",
+            "call_to_action_button": "Blue"
+        }
+    },
+    "advanced_brand_identity": {
+        "core_brand_meaning": {
+            "essence": "A balanced, natural and inspiring place to live — where people and nature thrive together.",
+            "name_explanation": {
+                "Mandala": "Balance, whole, wholeness",
+                "Garden": "Nature, growth, sanctuary",
+                "AWT": "Animal, Water, Tree"
+            }
+        },
+        "color_strategy": {
+            "primary_palette": {
+                "Forest Green": {
+                    "hex": "#2E7D32",
+                    "mood": "Nature, growth, stability"
+                },
+                "Sky Blue": {
+                    "hex": "#4FC3F7",
+                    "mood": "Openness, calm, clarity"
+                },
+                "Soft Mustard": {
+                    "hex": "#F9A825",
+                    "mood": "Warmth, human touch"
+                }
+            },
+            "secondary_palette": {
+                "Charcoal": {
+                    "hex": "#212121",
+                    "usage": "Headlines, premium text"
+                },
+                "Off-White": {
+                    "hex": "#FAFAFA",
+                    "usage": "Background / clean spaces"
+                },
+                "Sand Beige": {
+                    "hex": "#F3E5AB",
+                    "usage": "Subtle warm accents"
+                }
+            },
+            "visual_sample": {
+                "primary": [
+                    "#2E7D32",
+                    "#4FC3F7",
+                    "#F9A825"
+                ],
+                "secondary": [
+                    "#212121",
+                    "#FAFAFA",
+                    "#F3E5AB"
+                ]
+            },
+            "notes": "These tones give a serene, inviting yet premium feel — ideal for modern residential lifestyle branding."
+        },
+        "typography": {
+            "primary_typefaces": [
+                "Inter",
+                "Montserrat",
+                "Poppins"
+            ],
+            "secondary_typefaces": [
+                "Playfair Display",
+                "Merriweather"
+            ],
+            "pairing_example": {
+                "headline": "Inter Bold",
+                "body_text": "Inter Regular",
+                "accent": "Playfair Display Italic"
+            }
+        },
+        "logo_and_graphic_motifs": {
+            "mandala_motif": "Use as a subtle pattern in backgrounds, section dividers and icon badges.",
+            "nature_icons": [
+                "Tree",
+                "Water droplet",
+                "Family",
+                "Path"
+            ],
+            "rationale": "These elements support the AWT philosophy visually."
+        },
+        "visual_style_and_mood": {
+            "major_brand_look": [
+                "Natural light, greenery, uplifting",
+                "Premium, calm, professional",
+                "Warm lifestyle imagery",
+                "Clean typography + soft accents"
+            ],
+            "mood_keywords": [
+                "Balanced",
+                "Serene",
+                "Premium",
+                "Natural",
+                "Spacious",
+                "Connected",
+                "Modern",
+                "Family-Friendly",
+                "Inspiring"
+            ]
+        },
+        "sample_style_guidelines": {
+            "social_media_post": {
+                "background_color": "Off-White (#FAFAFA)",
+                "accent_border_or_icon": "Sky Blue (#4FC3F7)",
+                "headline_text": "Charcoal (#212121) bold",
+                "call_to_action_button": "Forest Green (#2E7D32)"
+            },
+            "website_hero_section": {
+                "hero_background": "Photo of landscape + gentle Forest Green overlay",
+                "logo": "White / Off-White",
+                "tagline": "Mustard Yellow (#F9A825) accents"
+            },
+            "brochure_visual": {
+                "main_headline": "Charcoal",
+                "subtext": "Sand Beige",
+                "section_dividers": "Thin Forest Green lines"
+            }
+        },
+        "visual_references_and_inspiration": {
+            "keywords": [
+                "Serene daylight lifestyle photography",
+                "Premium minimal architecture",
+                "Natural textures, soft gradients",
+                "Family in greenspace environment",
+                "Elegant modern real estate mood"
+            ]
+        },
+        "brand_application_examples": {
+            "simple_styles": [
+                "Logo over soft nature background",
+                "Green border + white text blocks",
+                "Water + tree icons in brochure footers"
+            ],
+            "summary_of_key_visual_identity": {
+                "element": "Brand Feeling",
+                "colour": "Natural, calm, premium",
+                "type": "Clean, modern, easy to read",
+                "pattern_and_symbols": "Subtle, thematic, meaningful"
+            }
+        }
+    }
+}
