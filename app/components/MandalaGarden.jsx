@@ -392,40 +392,49 @@ function SlideMasterPlan({ reduced }) {
           <Media src={A.masterPlan} grad={["#9aa3b0", "#5a6a7e"]} fit="cover" bg="#fff" reduced={reduced} />
           {BLOCKS.map((b, i) => {
             const on = sel === b.name;
+            // wrapper нь CSS transform-оор төвлүүлнэ; motion зөвхөн scale-г хөдөлгөнө
             return (
-              <motion.button key={b.name} onClick={() => setSel(on ? null : b.name)}
-                animate={reduced ? {} : { scale: on ? 1.2 : [1, 1.14, 1] }}
-                transition={on ? { duration: 0.2 } : { duration: 2.4, repeat: Infinity, delay: i * 0.4 }}
-                style={{ position: "absolute", left: b.x, top: b.y, transform: "translate(-50%,-50%)",
-                  width: "clamp(52px,4.2vw,72px)", height: "clamp(52px,4.2vw,72px)", borderRadius: "50%",
-                  cursor: "pointer", border: `3px solid #fff`,
-                  background: on ? GREEN : "rgba(46,125,50,0.85)", color: "#fff",
-                  fontFamily: FONT_BRAND, fontSize: "clamp(16px,1.3vw,24px)", fontWeight: 900,
-                  boxShadow: on ? `0 0 0 8px rgba(46,125,50,0.35),0 10px 30px rgba(0,0,0,0.4)`
-                                : `0 4px 18px rgba(0,0,0,0.35)` }}>
-                {b.name}
-              </motion.button>
+              <div key={b.name} style={{ position: "absolute", left: b.x, top: b.y,
+                transform: "translate(-50%,-50%)" }}>
+                <motion.button onClick={() => setSel(on ? null : b.name)}
+                  animate={reduced ? {} : { scale: on ? 1.18 : [1, 1.1, 1] }}
+                  transition={on ? { duration: 0.2 } : { duration: 2.4, repeat: Infinity, delay: i * 0.4 }}
+                  style={{ display: "flex", alignItems: "center", justifyContent: "center",
+                    width: "clamp(46px,3.6vw,62px)", height: "clamp(46px,3.6vw,62px)", borderRadius: "50%",
+                    cursor: "pointer", border: `3px solid #fff`,
+                    background: on ? GREEN : "rgba(46,125,50,0.88)", color: "#fff",
+                    fontFamily: FONT_BRAND, fontSize: "clamp(15px,1.15vw,21px)", fontWeight: 900,
+                    boxShadow: on ? `0 0 0 7px rgba(46,125,50,0.32),0 8px 24px rgba(0,0,0,0.4)`
+                                  : `0 3px 14px rgba(0,0,0,0.35)` }}>
+                  {b.name}
+                </motion.button>
+              </div>
             );
           })}
-          <AnimatePresence>
-            {active && (
-              <motion.div key={active.name} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
-                transition={{ duration: 0.3 }}
-                style={{ position: "absolute", left: "50%", bottom: 20, transform: "translateX(-50%)",
-                  background: "rgba(255,255,255,0.97)", borderRadius: 18, padding: "20px 34px", minWidth: 460,
-                  boxShadow: "0 18px 60px rgba(0,0,0,0.3)", display: "flex", gap: 32, alignItems: "center" }}>
-                <div style={{ fontFamily: FONT_HEAD, fontSize: "clamp(28px,2.4vw,42px)", fontWeight: 700, color: GREEN, lineHeight: 1 }}>
-                  {active.name}<span style={{ fontSize: "0.5em", fontWeight: 400, color: "#777", fontFamily: FONT_BODY }}> блок</span>
-                </div>
-                <div style={{ width: 1, alignSelf: "stretch", background: "#0002" }} />
-                <CardStat k="Талбай" v={`${active.area} м²`} />
-                <CardStat k="Өрөө" v={active.rooms} />
-                <CardStat k="Ашиглалт" v={active.handover} />
-                <button onClick={() => setSel(null)} style={{ marginLeft: 4, width: 52, height: 52, borderRadius: "50%",
-                  border: "none", background: OFFWHITE, color: CHARCOAL, fontSize: 26, cursor: "pointer", fontWeight: 700 }}>×</button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+
+          {/* popup — flex-ээр төвлүүлсэн wrapper (transform зөрчилгүй) */}
+          <div style={{ position: "absolute", left: 0, right: 0, bottom: 18, display: "flex",
+            justifyContent: "center", padding: "0 16px", pointerEvents: "none" }}>
+            <AnimatePresence>
+              {active && (
+                <motion.div key={active.name} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 16 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ pointerEvents: "auto", background: "rgba(255,255,255,0.97)", borderRadius: 18,
+                    padding: "18px 26px", maxWidth: "min(820px,96%)", boxShadow: "0 18px 60px rgba(0,0,0,0.3)",
+                    display: "flex", gap: "clamp(18px,2vw,30px)", alignItems: "center", flexWrap: "nowrap" }}>
+                  <div style={{ fontFamily: FONT_HEAD, fontSize: "clamp(26px,2.2vw,40px)", fontWeight: 700, color: GREEN, lineHeight: 1, whiteSpace: "nowrap" }}>
+                    {active.name}<span style={{ fontSize: "0.45em", fontWeight: 400, color: "#777", fontFamily: FONT_BODY }}> блок</span>
+                  </div>
+                  <div style={{ width: 1, alignSelf: "stretch", background: "#0002" }} />
+                  <CardStat k="Талбай" v={`${active.area} м²`} />
+                  <CardStat k="Өрөө" v={active.rooms} />
+                  <CardStat k="Ашиглалт" v={active.handover} />
+                  <button onClick={() => setSel(null)} style={{ flexShrink: 0, width: 48, height: 48, borderRadius: "50%",
+                    border: "none", background: OFFWHITE, color: CHARCOAL, fontSize: 24, cursor: "pointer", fontWeight: 700 }}>×</button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </SlidePad>
