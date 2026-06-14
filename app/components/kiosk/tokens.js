@@ -4,13 +4,19 @@
 //  өнгө, фонт, агуулгын дата байна — UI код байхгүй.
 // ============================================================================
 
-// ── Албан ёсны палитр ───────────────────────────────────────────────────────
-export const GREEN    = "#2E7D32"; // Forest Green — байгаль, өсөлт (CTA, гол accent)
-export const BLUE     = "#4FC3F7"; // Sky Blue — ус, тунгалаг, тайван
-export const MUSTARD  = "#F9A825"; // Soft Mustard — хүний дулаан, highlight/уриа
-export const CHARCOAL = "#212121"; // гарчиг, premium текст
-export const OFFWHITE = "#FAFAFA"; // background, цэвэр зай
+// ── Албан ёсны палитр (mandala-garden-brand.skill дагуу — ЯГ ЭДГЭЭР hex) ──────
+//  3 дэд брэнд: Zoo (шар) · Water (цэнхэр) · Forest (ногоон). 60-30-10 дүрэм.
+export const GREEN    = "#429547"; // Forest Garden — ногоон (гол accent, CTA)
+export const BLUE     = "#009DDE"; // Water Garden — цэнхэр
+export const MUSTARD  = "#FEB20A"; // Zoo Garden — шар (highlight/уриа, CTA pill)
+export const CHARCOAL = "#4A4A4A"; // брэндийн ink — гарчиг/текст (дулаан саарал)
+export const OFFWHITE = "#FEFBF6"; // cream — 60% давамгай дэвсгэр
 export const SAND     = "#F3E5AB"; // зөөлөн дулаан accent
+export const DARK     = "#212121"; // гүн дэвсгэр (dark slide)
+// ── Гүн/баялаг хувилбар (10% accent) ─────────────────────────────────────────
+export const GREEN_DEEP = "#147317"; // Forest deep
+export const BLUE_DEEP  = "#0057B8"; // Water deep
+export const ZOO_DEEP   = "#DE794D"; // Zoo terracotta
 
 // ── Фонт ────────────────────────────────────────────────────────────────────
 export const FONT_HEAD   = "'Mogul Magistral','Samsung Sharp Sans', var(--font-inter), sans-serif";

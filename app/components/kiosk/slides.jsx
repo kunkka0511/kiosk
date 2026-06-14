@@ -9,9 +9,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  GREEN, BLUE, MUSTARD, CHARCOAL, OFFWHITE, SAND,
+  GREEN, BLUE, MUSTARD, CHARCOAL, OFFWHITE, SAND, DARK,
   FONT_HEAD, FONT_BRAND, FONT_BODY, FONT_ACCENT,
-  A, plan, PLAN_COUNTS, STATS, BLOCKS, BLOCK_NOTE, FLOOR_BLOCKS,
+  A, plan, PLAN_COUNTS, STATS, BLOCKS, BLOCK_NOTE,
   AMENITIES, INFRA, BRANDS, NEARBY, SHOWROOM, SHOWROOM_INTRO, CONSTRUCTION,
 } from "./tokens";
 import { Media, MandalaMotif, CountUp, Particles, Heading, SlidePad } from "./ui";
@@ -164,113 +164,114 @@ function SlideConstruction({ reduced }) {
   );
 }
 
-// ── 5. MASTER PLAN ───────────────────────────────────────────────────────────
+// ── 5. MASTER PLAN — ТОМ 3D render (бүх мэдээлэл зураг дотроо) ────────────────
+// Зургийг бараг бүтэн дэлгэцэд харуулна. Tap → бүтэн дэлгэцийн zoom.
 function SlideMasterPlan({ reduced }) {
-  const [sel, setSel] = useState(null);
-  const active = BLOCKS.find((b) => b.name === sel);
+  const [zoom, setZoom] = useState(false);
   return (
-    <SlidePad>
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: OFFWHITE, display: "flex", flexDirection: "column",
+      padding: "clamp(36px,4.5vh,60px) clamp(32px,3vw,64px) clamp(16px,2.5vh,32px)", fontFamily: FONT_BODY }}>
       <Heading kicker="Ерөнхий төлөвлөгөө · Нийт 14 блок" reduced={reduced}>Нэгдсэн төлөвлөлт</Heading>
-      <p style={{ fontSize: "clamp(16px,1.2vw,22px)", color: "#555", margin: "-18px 0 16px" }}>
-        201–205 блок дээр дарж дэлгэрэнгүйг үзнэ үү
-      </p>
-      <div style={{ flex: 1, minHeight: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ position: "relative", aspectRatio: "1920 / 1077", width: "min(100%, calc((100vh - 360px) * 1.783))",
-          borderRadius: 16, overflow: "hidden", background: "#fff", boxShadow: "0 12px 40px rgba(0,0,0,0.08)" }}>
-          {/* IMG: Нэгдсэн төлөвлөлт (All edited.jpg) */}
-          <Media src={A.masterPlan} grad={["#9aa3b0", "#5a6a7e"]} fit="cover" bg="#fff" reduced={reduced} />
-          {BLOCKS.map((b, i) => {
-            const on = sel === b.name;
-            return (
-              <div key={b.name} style={{ position: "absolute", left: b.x, top: b.y, transform: "translate(-50%,-50%)" }}>
-                <motion.button onClick={() => setSel(on ? null : b.name)}
-                  animate={reduced ? {} : { scale: on ? 1.18 : [1, 1.1, 1] }}
-                  transition={on ? { duration: 0.2 } : { duration: 2.4, repeat: Infinity, delay: i * 0.4 }}
-                  style={{ display: "flex", alignItems: "center", justifyContent: "center",
-                    width: "clamp(46px,3.6vw,62px)", height: "clamp(46px,3.6vw,62px)", borderRadius: "50%",
-                    cursor: "pointer", border: "3px solid #fff", background: b.badge, color: "#fff",
-                    fontFamily: FONT_BRAND, fontSize: "clamp(15px,1.15vw,21px)", fontWeight: 900,
-                    boxShadow: on ? `0 0 0 7px ${b.badge}44, 0 8px 24px rgba(0,0,0,0.4)` : "0 3px 14px rgba(0,0,0,0.35)" }}>
-                  {b.name}
-                </motion.button>
-              </div>
-            );
-          })}
 
-          <div style={{ position: "absolute", left: 0, right: 0, bottom: 18, display: "flex", justifyContent: "center", padding: "0 16px", pointerEvents: "none" }}>
-            <AnimatePresence>
-              {active && (
-                <motion.div key={active.name} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 16 }} transition={{ duration: 0.3 }}
-                  style={{ pointerEvents: "auto", background: "rgba(255,255,255,0.97)", borderRadius: 18, padding: "18px 26px",
-                    maxWidth: "min(860px,96%)", boxShadow: "0 18px 60px rgba(0,0,0,0.3)", borderTop: `4px solid ${active.badge}`,
-                    display: "flex", gap: "clamp(16px,2vw,28px)", alignItems: "center", flexWrap: "nowrap" }}>
-                  <div style={{ fontFamily: FONT_HEAD, fontSize: "clamp(26px,2.2vw,40px)", fontWeight: 700, color: active.badge, lineHeight: 1, whiteSpace: "nowrap" }}>
-                    {active.name}<span style={{ fontSize: "0.45em", fontWeight: 400, color: "#777", fontFamily: FONT_BODY }}> блок</span>
-                  </div>
-                  <div style={{ width: 1, alignSelf: "stretch", background: "#0002" }} />
-                  <CardStat k="Талбай" v={`${active.area} м²`} />
-                  <CardStat k="Өрөө" v={active.rooms} />
-                  <CardStat k="Ашиглалт" v={active.handover} />
-                  <button onClick={() => setSel(null)} style={{ flexShrink: 0, width: 48, height: 48, borderRadius: "50%", border: "none", background: OFFWHITE, color: CHARCOAL, fontSize: 24, cursor: "pointer", fontWeight: 700 }}>×</button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-      </div>
-      <p style={{ fontSize: "clamp(12px,0.85vw,15px)", color: "#999", margin: "10px 0 0", textAlign: "center" }}>{BLOCK_NOTE}</p>
-    </SlidePad>
-  );
-}
-function CardStat({ k, v }) {
-  return (
-    <div>
-      <div style={{ fontSize: "clamp(12px,0.9vw,16px)", color: "#888", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 5 }}>{k}</div>
-      <div style={{ fontSize: "clamp(18px,1.5vw,28px)", fontWeight: 700, color: CHARCOAL }}>{v}</div>
+      {/* ТОМ зураг — үлдсэн орон зайг бүтэн дүүргэнэ, tap → fullscreen */}
+      <motion.button onClick={() => setZoom(true)} whileTap={{ scale: 0.995 }}
+        style={{ flex: 1, minHeight: 0, width: "100%", position: "relative", border: "none", background: "transparent",
+          cursor: "pointer", padding: 0, borderRadius: 16, overflow: "hidden" }}>
+        {/* IMG: Нэгдсэн төлөвлөлт 3D render (All edited.jpg) */}
+        <Media src={A.masterPlan} grad={["#9aa3b0", "#5a6a7e"]} fit="contain" bg={OFFWHITE} reduced={reduced} />
+        <span style={{ position: "absolute", bottom: 12, right: 12, background: "rgba(0,0,0,0.55)", color: "#fff",
+          padding: "8px 16px", borderRadius: 12, fontSize: "clamp(13px,1vw,18px)", backdropFilter: "blur(4px)" }}>🔍 томруулах</span>
+      </motion.button>
+
+      <p style={{ fontSize: "clamp(12px,0.85vw,15px)", color: "#999", margin: "8px 0 0", textAlign: "center" }}>{BLOCK_NOTE}</p>
+
+      {/* fullscreen zoom */}
+      <AnimatePresence>
+        {zoom && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setZoom(false)}
+            style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(18,22,18,0.96)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+            <motion.div initial={{ scale: 0.96 }} animate={{ scale: 1 }} exit={{ scale: 0.97 }} transition={{ duration: 0.3 }} style={{ width: "100%", height: "100%" }}>
+              <Media src={A.masterPlan} grad={["#9aa3b0", "#5a6a7e"]} fit="contain" bg="transparent" reduced={reduced} />
+            </motion.div>
+            <button onClick={() => setZoom(false)} style={{ position: "fixed", top: 26, right: 26, width: 64, height: 64, borderRadius: "50%",
+              border: "none", background: GREEN, color: "#fff", fontSize: 32, fontWeight: 700, cursor: "pointer" }}>×</button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
-// ── 4. FLOOR PLANS / РЕНДЕР ──────────────────────────────────────────────────
-function SlideFloorPlans({ reduced }) {
-  const [block, setBlock] = useState(FLOOR_BLOCKS[0].name);
-  const [box, setBox] = useState(null);
+// ── 6. ОРОН СУУЦ — Айл бүрийн давхрын хуваалт (жинхэнэ зургийг ТОМ харуулна) ──
+// Зураг бүр өөртөө талбай + өрөөний задаргааг агуулсан мэргэжлийн plan. Зүүн талд
+// ТОМ зураг, баруун талд бусад айлын thumbnail (ДЭЭШ/ДООШ swipe). Tap → бүтэн дэлгэц.
+function SlideUnits({ reduced }) {
+  const blocks = BLOCKS.filter((b) => PLAN_COUNTS[b.name] > 0); // 202–205
+  const [block, setBlock] = useState(blocks[0].name);
+  const [idx, setIdx] = useState(0);
+  const [box, setBox] = useState(false);
   const count = PLAN_COUNTS[block];
   const images = Array.from({ length: count }, (_, i) => plan(block, i + 1));
-  const info = BLOCKS.find((b) => b.name === block);
+  const badge = (BLOCKS.find((b) => b.name === block) || {}).badge || GREEN;
+
   return (
     <SlidePad>
-      <Heading kicker="Орон сууц · 2–4 өрөө · 47–126 м²" kickerColor={BLUE} reduced={reduced}>Давхрын хуваалт & зураг</Heading>
-      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 18, alignItems: "center" }}>
-        {FLOOR_BLOCKS.map((b) => {
+      <Heading kicker="Орон сууц · 2–4 өрөө · 47–126 м²" kickerColor={BLUE} reduced={reduced}>Айл бүрийн давхрын хуваалт</Heading>
+
+      {/* блок сонголт */}
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16, alignItems: "center" }}>
+        {blocks.map((b) => {
           const on = b.name === block;
           return (
-            <motion.button key={b.name} onClick={() => setBlock(b.name)} whileTap={{ scale: 0.96 }}
-              style={{ minHeight: 60, padding: "0 28px", borderRadius: 36, cursor: "pointer",
+            <motion.button key={b.name} onClick={() => { setBlock(b.name); setIdx(0); }} whileTap={{ scale: 0.95 }}
+              style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, lineHeight: 1, whiteSpace: "nowrap",
+                minHeight: 56, padding: "0 26px", borderRadius: 30, cursor: "pointer",
                 border: on ? `2px solid ${b.badge}` : "2px solid #0001", background: on ? b.badge : "#fff",
-                color: on ? "#fff" : CHARCOAL, fontFamily: FONT_BRAND, fontSize: "clamp(18px,1.4vw,26px)", fontWeight: 900 }}>
-              {b.name}
+                color: on ? "#fff" : CHARCOAL, fontFamily: FONT_BRAND, fontWeight: 900, fontSize: "clamp(17px,1.3vw,24px)" }}>
+              {b.name}<span style={{ fontSize: "0.55em", fontWeight: 400, opacity: 0.85 }}>блок</span>
             </motion.button>
           );
         })}
-        <div style={{ marginLeft: "auto", fontSize: "clamp(15px,1.1vw,20px)", color: "#555" }}>
-          {info.area} м² · {info.rooms} · {count} хувилбар
+        <div style={{ marginLeft: "auto", fontSize: "clamp(15px,1.1vw,20px)", color: "#555" }}>{count} айл · {idx + 1}/{count}</div>
+      </div>
+
+      <div style={{ flex: 1, minHeight: 0, display: "grid", gridTemplateColumns: "1fr clamp(150px,15vw,224px)",
+        gridTemplateRows: "minmax(0, 1fr)", gap: "clamp(16px,1.8vw,28px)" }}>
+        {/* ТОМ floor plan (зураг өөртөө талбай + өрөөний задаргааг агуулсан) */}
+        <motion.button onClick={() => setBox(true)} whileTap={{ scale: 0.99 }}
+          style={{ position: "relative", width: "100%", height: "100%", border: "1px solid #0001", background: "#fff", borderRadius: 18, overflow: "hidden",
+            cursor: "pointer", padding: 0, minHeight: 0, boxShadow: "0 16px 50px rgba(0,0,0,0.10)" }}>
+          <AnimatePresence mode="wait">
+            <motion.div key={block + idx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ duration: 0.35 }} style={{ position: "absolute", inset: 0, padding: 8 }}>
+              {/* IMG: айлын давхрын хуваалт зураг — /assets/<block> (n).png */}
+              <Media src={images[idx]} grad={["#eef1f4", "#cfd6dd"]} fit="contain" bg="#fff" reduced={reduced} />
+            </motion.div>
+          </AnimatePresence>
+          <span style={{ position: "absolute", bottom: 14, right: 14, background: "rgba(0,0,0,0.55)", color: "#fff",
+            padding: "8px 16px", borderRadius: 12, fontSize: "clamp(13px,1vw,18px)", backdropFilter: "blur(4px)" }}>🔍 томруулах</span>
+        </motion.button>
+
+        {/* айл thumbnail багана — ДЭЭШ/ДООШ swipe */}
+        <div style={{ minHeight: 0, overflowY: "auto", touchAction: "pan-y", display: "flex", flexDirection: "column",
+          gap: 12, paddingRight: 6, WebkitOverflowScrolling: "touch" }}>
+          {images.map((src, i) => {
+            const on = i === idx;
+            return (
+              <motion.button key={src} onClick={() => setIdx(i)} whileTap={{ scale: 0.96 }}
+                style={{ position: "relative", width: "100%", aspectRatio: "1", flexShrink: 0, borderRadius: 12, overflow: "hidden",
+                  cursor: "pointer", padding: 4, background: "#fff", border: on ? `3px solid ${badge}` : "2px solid #0001" }}>
+                <Media src={src} grad={["#eef1f4", "#cfd6dd"]} fit="contain" bg="#fff" reduced={reduced} />
+                <span style={{ position: "absolute", left: 8, bottom: 6, background: on ? badge : "rgba(0,0,0,0.5)", color: "#fff",
+                  fontSize: 13, fontWeight: 700, padding: "2px 9px", borderRadius: 9 }}>{i + 1}</span>
+              </motion.button>
+            );
+          })}
         </div>
       </div>
-      <div style={{ flex: 1, minHeight: 0, display: "flex", flexWrap: "wrap", gap: 16, alignContent: "flex-start", justifyContent: "center", overflow: "hidden" }}>
-        {images.map((src, i) => (
-          <motion.button key={src} onClick={() => setBox(i)} whileTap={{ scale: 0.96 }}
-            initial={{ opacity: 0, y: reduced ? 0 : 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.04 }}
-            style={{ position: "relative", width: "clamp(148px,12.5vw,205px)", aspectRatio: "1", borderRadius: 12,
-              overflow: "hidden", cursor: "pointer", padding: 0, border: "1px solid #0001", background: "#fff" }}>
-            {/* IMG: блокийн давхрын хуваалт зураг */}
-            <Media src={src} grad={["#cfd6dd", "#9aa3b0"]} fit="contain" bg="#fff" reduced={reduced} />
-            <span style={{ position: "absolute", left: 10, bottom: 8, background: GREEN, color: "#fff", fontSize: 14, fontWeight: 700, padding: "3px 10px", borderRadius: 10 }}>{i + 1}</span>
-          </motion.button>
-        ))}
-      </div>
-      <Lightbox images={images} index={box} label={`${block} блок`} onClose={() => setBox(null)}
-        onPrev={() => setBox((v) => (v - 1 + count) % count)} onNext={() => setBox((v) => (v + 1) % count)} reduced={reduced} />
+
+      <Lightbox images={images} index={box ? idx : null} label={`${block} блок`} onClose={() => setBox(false)}
+        onPrev={() => setIdx((v) => (v - 1 + count) % count)} onNext={() => setIdx((v) => (v + 1) % count)} reduced={reduced} />
     </SlidePad>
   );
 }
@@ -340,7 +341,7 @@ function SlideAmenities({ reduced }) {
 // ── 6. INFRASTRUCTURE ────────────────────────────────────────────────────────
 function SlideInfra({ reduced }) {
   return (
-    <SlidePad bg={CHARCOAL}>
+    <SlidePad bg={DARK}>
       <MandalaMotif size={560} color={GREEN} opacity={0.1} reduced={reduced} style={{ right: "-130px", top: "-100px" }} />
       <Heading kicker="Инженерийн шийдэл" kickerColor={MUSTARD} light reduced={reduced}>Найдвартай дэд бүтэц</Heading>
       <div style={{ position: "relative", display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "clamp(24px,2.4vw,44px)" }}>
@@ -410,8 +411,9 @@ export const SLIDES = [
   { name: "Танилцуулга",        dark: false, Comp: SlideShowroom },
   { name: "Барилгын явц",       dark: false, Comp: SlideConstruction },
   { name: "Ерөнхий төлөвлөгөө", dark: false, Comp: SlideMasterPlan },
-  { name: "Орон сууц",          dark: false, Comp: SlideFloorPlans },
+  { name: "Орон сууц",          dark: false, Comp: SlideUnits },
   { name: "Орчин",              dark: false, Comp: SlideAmenities },
   { name: "Дэд бүтэц",          dark: true,  Comp: SlideInfra },
   { name: "Байршил",            dark: false, Comp: SlideLocation },
 ];
+

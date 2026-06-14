@@ -84,7 +84,7 @@ export function MandalaMotif({ size = 620, color = GREEN, opacity = 0.06, reduce
 // ── "• • •" брэндийн гарын үсэг divider — 3 цэг тус бүр өөр брэнд өнгөтэй ──────
 // (Forest Green · Sky Blue · Soft Mustard). Idle үед аажуухан анивчина.
 export function TriDots({ center, reduced }) {
-  const cols = [GREEN, BLUE, MUSTARD];
+  const cols = [MUSTARD, BLUE, GREEN]; // Zoo шар · Water цэнхэр · Forest ногоон
   return (
     <div style={{ display: "flex", gap: 9, justifyContent: center ? "center" : "flex-start", margin: "0 0 18px" }}>
       {cols.map((c, i) => (

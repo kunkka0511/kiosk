@@ -10,7 +10,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
-const COLOR = "#4FC3F7"; // Sky Blue — брэндийн усны өнгө
+const COLOR = "#009DDE"; // Water Garden цэнхэр — брэндийн усны өнгө
 const MAX = 8;
 const LIFE = 900;
 const GAP = 150;
