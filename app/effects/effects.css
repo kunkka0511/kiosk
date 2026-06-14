@@ -1,0 +1,37 @@
+.fx-page {
+  height: 100%;
+  overflow-y: auto;
+  background: #212121;
+  color: #fafafa;
+  padding: 48px 28px 90px;
+  font-family: var(--font-inter), Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.fx-head {
+  max-width: 1140px;
+  margin: 0 auto 38px;
+}
+.fx-head h1 {
+  font-size: clamp(1.9rem, 4vw, 2.7rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.fx-head p {
+  margin-top: 10px;
+  max-width: 60ch;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  opacity: 0.6;
+}
+.fx-accent {
+  color: #f9a825;
+}
+
+.fx-grid {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 22px;
+}

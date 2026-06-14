@@ -1,5 +1,5 @@
-import MandalaGarden from "./components/MandalaGarden";
+import MandalaKiosk from "./components/kiosk/MandalaKiosk";
 
 export default function Home() {
-  return <MandalaGarden />;
+  return <MandalaKiosk />;
 }
