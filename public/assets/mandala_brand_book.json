@@ -1,0 +1,250 @@
+{
+    "brand_name": "Mandala Garden",
+    "brand_philosophy": {
+        "overview": "Mandala Garden is a premium residential complex in Ulaanbaatar designed to harmonize modern living with nature. The brand name derives from the Sanskrit word 'mandala' meaning balance and wholeness, and 'garden' representing nature and serenity. The AWT concept—Animal, Water, Tree—reflects the eco‑friendly, family‑oriented vision of the development.",
+        "mission": "To create a balanced, inspiring and healthy home where families thrive in harmony with nature.",
+        "vision": "Mandala Garden envisions a holistic community that combines modern comfort, premium design and ecological sustainability, offering a warm, safe and vibrant environment for families.",
+        "values": [
+            "Balance and harmony with nature",
+            "Warmth, trust and family orientation",
+            "Premium quality and modern design",
+            "Sustainability and environmental stewardship",
+            "Community, comfort and well‑being"
+        ]
+    },
+    "logo": {
+        "description": "The Mandala Garden logo features a stylized mandala motif composed of leaf‑like segments in multiple colors. It symbolizes wholeness, growth and balance, reflecting the project's integration of nature (AWT concept) and modern living.",
+        "usage_guidelines": {
+            "clear_space": "Maintain sufficient clear space around the logo equal to the height of one leaf segment on all sides.",
+            "min_size": "Ensure the logo remains legible; do not reproduce at sizes smaller than 15 mm in height for print or 60 px for digital.",
+            "color_usage": "Use the full‑color version on light or neutral backgrounds. A monochrome white or dark version may be used on solid color or photographic backgrounds. Do not alter the logo colors or apply gradients.",
+            "do_not": [
+                "Do not stretch, distort or rotate the logo.",
+                "Do not add drop shadows or special effects.",
+                "Do not place the logo on clashing or busy backgrounds.",
+                "Do not recolor individual elements."
+            ]
+        },
+        "color_variants": [
+            "full_color",
+            "white_monochrome",
+            "black_monochrome"
+        ],
+        "mandala_motif": "The leaf‑based mandala motif may be used independently as a decorative pattern or watermark in marketing materials."
+    },
+    "color_palette": {
+        "primary": {
+            "zoo_garden_orange": {
+                "hex": "#F9A825",
+                "rgb": "249,168,37",
+                "description": "Warm, energetic hue representing the Zoo Garden zone and evoking friendliness and vitality."
+            },
+            "water_garden_blue": {
+                "hex": "#0094D9",
+                "rgb": "0,148,217",
+                "description": "Bright blue inspired by clear water and open sky, symbolizing calmness, trust and openness."
+            },
+            "forest_garden_green": {
+                "hex": "#2E7D32",
+                "rgb": "46,125,50",
+                "description": "Rich green reflecting trees and growth in the Forest Garden zone, signifying nature, health and stability."
+            }
+        },
+        "secondary": {
+            "sunny_yellow": {
+                "hex": "#FFCC80",
+                "rgb": "255,204,128",
+                "description": "Soft yellow accent inspired by sunlight, used sparingly for highlights and accents."
+            },
+            "light_blue": {
+                "hex": "#B3E5FC",
+                "rgb": "179,229,252",
+                "description": "A light blue tint used for backgrounds and secondary areas to maintain an airy feel."
+            },
+            "light_green": {
+                "hex": "#C8E6C9",
+                "rgb": "200,230,201",
+                "description": "Soft green tint used for backgrounds and to support the primary green."
+            }
+        },
+        "gradients": {
+            "blue_gradient": [
+                "#65C6F7",
+                "#0094D9"
+            ],
+            "orange_gradient": [
+                "#FFD873",
+                "#F9A825"
+            ],
+            "green_gradient": [
+                "#B8E4AC",
+                "#2E7D32"
+            ]
+        },
+        "color_balance": {
+            "dominant": 0.6,
+            "secondary": 0.3,
+            "accent": 0.1,
+            "usage": "Dominant colors make up about 60% of any composition (backgrounds and large areas), secondary colors about 30% (supporting elements), and accent colors about 10% for highlights and calls to action."
+        }
+    },
+    "typography": {
+        "primary_font": {
+            "name": "Samsung Sharp Sans",
+            "styles": [
+                "Regular",
+                "Medium",
+                "Bold"
+            ],
+            "usage": "Used for posters, headlines and important messaging. Modern, clean and geometric with strong presence.",
+            "notes": "Use Bold weight for key headlines; maintain ample letter spacing and line height for readability."
+        },
+        "secondary_font": {
+            "name": "Gilroy",
+            "styles": [
+                "Light",
+                "Regular",
+                "Semibold"
+            ],
+            "usage": "Used for body copy, paragraphs and general text. Minimalistic and easy to read.",
+            "notes": "Use light or regular weights for long text; semibold for subheadings."
+        },
+        "accent_font": {
+            "name": "Mogul Vesna",
+            "styles": [
+                "Regular"
+            ],
+            "usage": "Used sparingly for quotes, testimonials or special highlights. Elegant, script‑inspired typeface that complements the primary fonts.",
+            "notes": "Should be used at larger sizes with adequate line spacing; avoid long passages of text."
+        },
+        "hierarchy": {
+            "heading_1": {
+                "font": "Samsung Sharp Sans",
+                "weight": "Bold",
+                "size": 48,
+                "letter_spacing": 1.2
+            },
+            "heading_2": {
+                "font": "Samsung Sharp Sans",
+                "weight": "Medium",
+                "size": 36,
+                "letter_spacing": 1.2
+            },
+            "heading_3": {
+                "font": "Gilroy",
+                "weight": "Semibold",
+                "size": 24,
+                "letter_spacing": 1.1
+            },
+            "body": {
+                "font": "Gilroy",
+                "weight": "Regular",
+                "size": 14,
+                "letter_spacing": 1.0
+            },
+            "caption": {
+                "font": "Gilroy",
+                "weight": "Light",
+                "size": 12,
+                "letter_spacing": 1.0
+            }
+        }
+    },
+    "iconography": {
+        "style": "Minimalist line icons with rounded ends and uniform stroke weight.",
+        "themes": [
+            "Tree",
+            "Water",
+            "Animal",
+            "Family",
+            "Community"
+        ],
+        "usage": "Use icons to supplement text and highlight features. Icons should be in brand colors with consistent size and spacing."
+    },
+    "patterns_and_elements": {
+        "mandala_pattern": "Subtle, repeating motif derived from the logo’s leaf shapes. Used as background textures or overlays in large areas.",
+        "circle_dots": "Three small circles in primary colors arranged horizontally. Used as visual separators or brand markers.",
+        "leaf_overlays": "Large semi‑transparent leaf shapes applied as corner overlays on images and layouts."
+    },
+    "photography": {
+        "style": "Realistic, warm and inviting lifestyle photography that highlights families, children, seniors and community life. Images should feel natural and candid with soft, diffused lighting.",
+        "color_tone": "Photographs should have warm, neutral tones with accents of green, blue and orange to complement the palette. Avoid overly cold or high‑contrast edits.",
+        "architectural_photography": "Exterior building shots should emphasize the scale, modern design and integration with nature. Edit to enhance blue skies and warm sunlight, reducing harsh shadows.",
+        "event_photography": "Capture candid interactions and positive energy at events. Focus on human connection and the comfortable office or sales environment, using warm lighting.",
+        "do_not": [
+            "Do not use stocky, generic or overly posed images.",
+            "Avoid dark, gloomy or desaturated photos.",
+            "Do not overcrowd compositions with too many subjects."
+        ]
+    },
+    "tone_of_voice": {
+        "characteristics": [
+            "Warm",
+            "Positive",
+            "Trustworthy",
+            "Family‑oriented",
+            "Inspiring",
+            "Confident"
+        ],
+        "examples": [
+            "Home is a place of warm memories and lasting comfort.",
+            "Investing in your family’s future starts with a beautiful, balanced home.",
+            "Experience modern living in harmony with nature at Mandala Garden."
+        ],
+        "notes": "Communication should be friendly yet professional, highlighting benefits to families and evoking trust and optimism."
+    },
+    "layout_system": {
+        "grid": "Utilize a clean, modular grid with generous margins. Common layouts follow a two‑column structure with flexible rows to accommodate text and images.",
+        "spacing": "Use consistent padding and white space to create an open, breathable composition. Align text and images to the grid lines.",
+        "call_to_action_buttons": {
+            "shape": "Rounded rectangles with subtle shadow.",
+            "primary_color": "#0094D9",
+            "text_color": "white",
+            "secondary_color": "#F9A825"
+        }
+    },
+    "technical_specifications": {
+        "print_materials": {
+            "resolution": "300 DPI for printed collateral (brochures, billboards, signage)",
+            "color_mode": "CMYK with Pantone equivalents for primary colors"
+        },
+        "digital_materials": {
+            "resolution": "72–150 DPI depending on use (web or social media)",
+            "color_mode": "RGB; use hex codes specified in the palette"
+        },
+        "file_formats": {
+            "logo": [
+                ".AI",
+                ".EPS",
+                ".PNG",
+                ".SVG"
+            ],
+            "fonts": [
+                ".OTF",
+                ".TTF"
+            ],
+            "images": [
+                ".JPG",
+                ".PNG"
+            ]
+        }
+    },
+    "applications": {
+        "stationery": [
+            "business cards",
+            "letterheads",
+            "envelopes"
+        ],
+        "marketing_collateral": [
+            "brochures",
+            "billboards",
+            "social media templates",
+            "event banners"
+        ],
+        "digital_assets": [
+            "website UI components",
+            "social posts",
+            "email templates"
+        ]
+    }
+}
