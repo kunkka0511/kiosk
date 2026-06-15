@@ -163,7 +163,7 @@ export default function MandalaKiosk() {
             style={{ position: "fixed", inset: 0, zIndex: 80, pointerEvents: "none", display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: 120 }}>
             <motion.div animate={reduced ? {} : { y: [0, -10, 0], opacity: [0.75, 1, 0.75] }} transition={{ duration: 2.2, repeat: Infinity }}
               style={{ background: GREEN, color: "#fff", padding: "18px 42px", borderRadius: 44, fontSize: "clamp(18px,1.4vw,28px)", fontWeight: 700, boxShadow: "0 10px 40px rgba(0,0,0,0.4)" }}>
-              👆 Эхлэхийн тулд дэлгэцэд хүрнэ үү
+              👆 Тавтай морил
             </motion.div>
           </motion.div>
         )}
