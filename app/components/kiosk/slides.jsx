@@ -9,39 +9,49 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  GREEN, BLUE, MUSTARD, CHARCOAL, OFFWHITE, SAND, DARK,
+  GREEN, BLUE, MUSTARD, CHARCOAL, OFFWHITE, DARK,
   FONT_HEAD, FONT_BRAND, FONT_BODY, FONT_ACCENT,
   A, plan, PLAN_COUNTS, STATS, BLOCKS, BLOCK_NOTE,
   AMENITIES, INFRA, BRANDS, NEARBY, SHOWROOM, SHOWROOM_INTRO, CONSTRUCTION,
 } from "./tokens";
-import { Media, MandalaMotif, CountUp, Particles, Heading, SlidePad } from "./ui";
+import { Media, MandalaMotif, LotusWatermark, CountUp, Heading, SlidePad } from "./ui";
 
 // ── 1. HERO ──────────────────────────────────────────────────────────────────
+//  Гол визуал = хорооллын нэгдсэн төлөвлөлтийн 3D render (бүтэн харагдана).
+//  Cream дэвсгэр (60% давамгай) — render-ийн цайвар фонтой жигд нийлнэ.
+//  Чимэг: ГАНЦ lotus petal булангийн watermark (brand book), текстийн АРД.
 function SlideHero({ reduced }) {
   return (
-    <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
-      <motion.div style={{ position: "absolute", inset: 0 }}
-        initial={reduced ? {} : { scale: 1.08 }} animate={{ scale: 1 }} transition={{ duration: 9, ease: "easeOut" }}>
-        {/* IMG: hero байгалийн дэвсгэр (drone/lifestyle render) */}
-        <Media src={A.hero} grad={["#7c9a6b", "#3f5b46", "#22332a"]} reduced={reduced} />
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: OFFWHITE }}>
+      {/* масштер план render — гол визуал, аажуухан ken-burns */}
+      <motion.div style={{ position: "absolute", inset: 0, zIndex: 1 }}
+        initial={reduced ? {} : { scale: 1.06 }} animate={{ scale: 1 }} transition={{ duration: 12, ease: "easeOut" }}>
+        {/* IMG: нэгдсэн төлөвлөлт 3D render — цэвэр (шошгогүй) хувилбараар солих (A.heroPlan) */}
+        <Media src={A.heroPlan} grad={["#cfd6dd", "#9aa3b0"]} fit="contain" bg={OFFWHITE} reduced={reduced} />
       </motion.div>
-      <div style={{ position: "absolute", inset: 0,
-        background: "linear-gradient(120deg, rgba(46,125,50,0.78) 0%, rgba(33,55,42,0.55) 45%, rgba(33,33,33,0.4) 100%)" }} />
-      <MandalaMotif size={760} color="#fff" opacity={0.07} reduced={reduced} style={{ right: "-160px", top: "-160px" }} />
-      <Particles count={20} reduced={reduced} />
 
-      <div style={{ position: "relative", zIndex: 2, height: "100%", display: "flex", flexDirection: "column",
-        justifyContent: "center", padding: "0 7vw", color: "#fff" }}>
-        <img src={A.logo} alt="Mandala Garden"
-          style={{ width: "clamp(96px,9vw,150px)", height: "auto", marginBottom: 28, filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.35))" }} />
-        <p style={{ fontFamily: FONT_ACCENT, fontStyle: "italic", fontSize: "clamp(22px,2vw,38px)", color: SAND, margin: "0 0 14px" }}>
+      {/* доод хэсэгт текст уншихад зориулсан зөөлөн cream scrim */}
+      <div style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
+        background: "linear-gradient(to top, rgba(254,251,246,0.97) 0%, rgba(254,251,246,0.78) 20%, rgba(254,251,246,0) 44%)" }} />
+
+      {/* ЧИМЭГ — lotus petal corner watermark (Forest ногоон, цайвар дэвсгэр дээр 8%) */}
+      <LotusWatermark size={460} color={GREEN} opacity={0.08} style={{ right: -120, bottom: -130, zIndex: 3 }} />
+
+      {/* лого — top-left */}
+      <img src={A.logo} alt="Mandala Garden"
+        style={{ position: "absolute", top: "clamp(28px,4vh,48px)", left: "7vw", zIndex: 4,
+          width: "clamp(96px,9vw,150px)", height: "auto", filter: "drop-shadow(0 2px 10px rgba(0,0,0,0.12))" }} />
+
+      {/* hero текст — доод зүүн */}
+      <div style={{ position: "absolute", left: "7vw", right: "7vw", bottom: "clamp(56px,8vh,96px)", zIndex: 4, color: CHARCOAL }}>
+        <p style={{ fontFamily: FONT_ACCENT, fontStyle: "italic", fontSize: "clamp(22px,2vw,38px)", color: GREEN, margin: "0 0 14px" }}>
           Байгальтай зохицсон амьдрах орчин
         </p>
-        <h1 style={{ fontFamily: FONT_HEAD, fontSize: "clamp(40px,4.4vw,76px)", fontWeight: 700, lineHeight: 1.06, margin: 0, maxWidth: 880 }}>
+        <h1 style={{ fontFamily: FONT_HEAD, fontSize: "clamp(40px,4.4vw,76px)", fontWeight: 700, lineHeight: 1.06, margin: 0, maxWidth: 980, color: CHARCOAL }}>
           Гэр бүлдээ үлдээх <span style={{ color: MUSTARD }}>үнэ цэнтэй</span> хөрөнгө оруулалт
         </h1>
-        <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 24, fontSize: "clamp(16px,1.3vw,22px)", color: "rgba(255,255,255,0.85)" }}>
-          <span style={{ fontWeight: 700, color: MUSTARD, fontFamily: FONT_BRAND, letterSpacing: "0.08em" }}>AWT</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 24, fontSize: "clamp(16px,1.3vw,22px)", color: "#666" }}>
+          <span style={{ fontWeight: 900, color: GREEN, fontFamily: FONT_BRAND, letterSpacing: "0.08em" }}>AWT</span>
           Animal · Water · Tree · Яармаг–Арцатын хөндий · 10 га · 14 блок
         </div>
       </div>

@@ -81,6 +81,23 @@ export function MandalaMotif({ size = 620, color = GREEN, opacity = 0.06, reduce
   );
 }
 
+// ── Lotus petal — булангийн watermark (brand book: corner petal, 8–12% opacity) ──
+//  Зөвхөн ЧИМЭГ. Текстийн АРД (zIndex доор), pointer-events байхгүй. Цайвар дэвсгэр
+//  дээр sub-brand өнгөөр, өнгөт дэвсгэр дээр цагаанаар. Нэг дизайнд ГАНЦ pattern.
+export function LotusWatermark({ size = 420, color = "#FFFFFF", opacity = 0.1, style }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 420 460" aria-hidden="true"
+      style={{ position: "absolute", pointerEvents: "none", ...style }}>
+      <g opacity={opacity} fill={color}>
+        <path d="M210 20 C300 130 380 230 380 320 C380 400 310 440 210 440
+                 C110 440 40 400 40 320 C40 230 120 130 210 20 Z" />
+        <path d="M120 90 C170 170 210 240 210 320 C210 240 250 170 300 90
+                 C250 150 170 150 120 90 Z" opacity="0.6" />
+      </g>
+    </svg>
+  );
+}
+
 // ── "• • •" брэндийн гарын үсэг divider — 3 цэг тус бүр өөр брэнд өнгөтэй ──────
 // (Forest Green · Sky Blue · Soft Mustard). Idle үед аажуухан анивчина.
 export function TriDots({ center, reduced }) {
