@@ -764,7 +764,7 @@ export default function MandalaGarden() {
               transition={{ duration: 2.2, repeat: Infinity }}
               style={{ background: GREEN, color: "#fff", padding: "18px 42px", borderRadius: 44,
                 fontSize: "clamp(18px,1.4vw,28px)", fontWeight: 700, boxShadow: "0 10px 40px rgba(0,0,0,0.4)" }}>
-              👆 Эхлэхийн тулд дэлгэцэд хүрнэ үү
+              👆 Сайнуу нэмэх хэрэгтэй гэж бодсон зүйлээ хэлээрэй баярлалаа
             </motion.div>
           </motion.div>
         )}

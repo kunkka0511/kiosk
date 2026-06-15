@@ -45,34 +45,26 @@
 
   /* ============================ PETALS ============================ */
   .petals{position:absolute;inset:0;pointer-events:none;z-index:1}
+  /* Навч ХӨДЛӨХГҮЙ — зөвхөн 3 брэнд өнгөөр (цэнхэр→шар→ногоон) аажуухан ээлжилнэ */
   .petal{
     position:absolute;
     fill:var(--blue);
-    transform-origin:center;
-    will-change:transform,opacity;
+    will-change:fill;
+    animation:hue 21s ease-in-out infinite;
   }
   /* top-right cluster */
-  .petal.tr1{top:-22%;right:-14%;width:62vw;opacity:.06;
-    animation:breathe1 26s var(--ease) infinite}
-  .petal.tr2{top:-30%;right:2%;width:42vw;opacity:.05;
-    animation:breathe2 31s var(--ease) infinite}
-  .petal.tr3{top:6%;right:-8%;width:34vw;opacity:.045;
-    animation:breathe1 23s var(--ease) infinite reverse}
+  .petal.tr1{top:-22%;right:-14%;width:min(62vw,1200px);opacity:.07;animation-delay:0s}
+  .petal.tr2{top:-30%;right:2%;width:min(42vw,820px);opacity:.06;animation-delay:-3.5s}
+  .petal.tr3{top:6%;right:-8%;width:min(34vw,660px);opacity:.05;animation-delay:-7s}
   /* bottom-left cluster */
-  .petal.bl1{bottom:-26%;left:-16%;width:60vw;opacity:.065;
-    animation:breathe2 28s var(--ease) infinite}
-  .petal.bl2{bottom:-18%;left:-4%;width:40vw;opacity:.05;
-    animation:breathe1 33s var(--ease) infinite reverse}
-  .petal.bl3{bottom:2%;left:-12%;width:30vw;opacity:.04;
-    animation:breathe2 24s var(--ease) infinite}
+  .petal.bl1{bottom:-26%;left:-16%;width:min(60vw,1160px);opacity:.075;animation-delay:-10.5s}
+  .petal.bl2{bottom:-18%;left:-4%;width:min(40vw,780px);opacity:.06;animation-delay:-14s}
+  .petal.bl3{bottom:2%;left:-12%;width:min(30vw,580px);opacity:.05;animation-delay:-17.5s}
 
-  @keyframes breathe1{
-    0%,100%{transform:rotate(0deg) scale(1);opacity:.05}
-    50%{transform:rotate(6deg) scale(1.08);opacity:.075}
-  }
-  @keyframes breathe2{
-    0%,100%{transform:rotate(0deg) scale(1.04);opacity:.045}
-    50%{transform:rotate(-5deg) scale(.96);opacity:.07}
+  @keyframes hue{
+    0%,100%{fill:var(--blue)}
+    33%{fill:var(--yellow)}
+    66%{fill:var(--green)}
   }
 
   /* ============================ DOTS ============================ */
@@ -84,11 +76,13 @@
   }
 
   /* ============================ CENTER ============================ */
+  /* absolute+margin:auto-аар аль ч чиглэлд баталгаатай голд */
   .center{
-    position:relative;z-index:5;
+    position:absolute;inset:0;margin:auto;
+    width:max-content;height:max-content;max-width:90vw;
+    z-index:6;
     display:flex;flex-direction:column;align-items:center;
-    gap:clamp(28px,4vh,60px);
-    transform:translateY(-2vh);
+    gap:clamp(24px,4vh,56px);
   }
   .logo-wrap{
     animation:logoIn 1.4s var(--ease) both, logoFloat 9s ease-in-out 1.4s infinite;
@@ -228,6 +222,20 @@
     will-change:transform;
   }
   .cursor.press{width:40px;height:40px;background:radial-gradient(circle,rgba(0,157,222,.32),transparent 70%)}
+
+  /* Portrait (босоо) дэлгэц — навч жижгэрч, лого/товч томрох */
+  @media (orientation: portrait){
+    .petal.tr1{width:min(60vw,440px)}
+    .petal.tr2{width:min(44vw,300px)}
+    .petal.tr3{width:min(34vw,240px)}
+    .petal.bl1{width:min(58vw,420px)}
+    .petal.bl2{width:min(42vw,280px)}
+    .petal.bl3{width:min(32vw,220px)}
+    .logo{width:clamp(220px,42vw,360px)}
+    .touch{width:clamp(130px,26vw,180px);height:clamp(130px,26vw,180px)}
+    .label{font-size:clamp(18px,3.6vw,26px)}
+    .swipe-label{font-size:clamp(13px,2.6vw,17px)}
+  }
 
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important;transition:none!important}

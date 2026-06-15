@@ -150,3 +150,12 @@ export const NEARBY = [
   { icon: "🌊", t: "Туул гол" },
   { icon: "🚌", t: "Яармаг тээврийн зангилаа" },
 ];
+
+// ── Борлуулалтын менежерүүд ──────────────────────────────────────────────────
+// Зураг: /public/assets/salers/ · phone-ийг хүн бүрээр энд засна (одоо төслийн утас).
+export const SALES = [
+  { name: "Б. Хишигдэлгэр", role: "Ахлах борлуулалтын менежер", img: "/assets/salers/sales-01-1.webp", phone: "7575-8000", c: MUSTARD },
+  { name: "Р. Чанцалдулам", role: "Борлуулалтын менежер",       img: "/assets/salers/Sales-03.webp",    phone: "7575-8000", c: BLUE },
+  { name: "О. Номин",       role: "Борлуулалтын менежер",       img: "/assets/salers/nomin-sales.webp", phone: "7575-8000", c: GREEN },
+  { name: "М. Хонгорзул",   role: "Борлуулалтын менежер",       img: "/assets/salers/sales-4.webp",     phone: "7575-8000", c: BLUE },
+];

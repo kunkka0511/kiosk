@@ -94,24 +94,31 @@ img, svg, video {
 
 /* petals */
 .wlc-petals{position:absolute;inset:0;pointer-events:none;z-index:1}
-.wlc-petal{position:absolute;fill:#009DDE;transform-origin:center;will-change:transform,opacity}
-.wlc-petal.tr1{top:-22%;right:-14%;width:62vw;opacity:.06;animation:wlc-b1 26s cubic-bezier(.45,.05,.25,1) infinite}
-.wlc-petal.tr2{top:-30%;right:2%;width:42vw;opacity:.05;animation:wlc-b2 31s cubic-bezier(.45,.05,.25,1) infinite}
-.wlc-petal.tr3{top:6%;right:-8%;width:34vw;opacity:.045;animation:wlc-b1 23s cubic-bezier(.45,.05,.25,1) infinite reverse}
-.wlc-petal.bl1{bottom:-26%;left:-16%;width:60vw;opacity:.065;animation:wlc-b2 28s cubic-bezier(.45,.05,.25,1) infinite}
-.wlc-petal.bl2{bottom:-18%;left:-4%;width:40vw;opacity:.05;animation:wlc-b1 33s cubic-bezier(.45,.05,.25,1) infinite reverse}
-.wlc-petal.bl3{bottom:2%;left:-12%;width:30vw;opacity:.04;animation:wlc-b2 24s cubic-bezier(.45,.05,.25,1) infinite}
-@keyframes wlc-b1{0%,100%{transform:rotate(0deg) scale(1);opacity:.05}50%{transform:rotate(6deg) scale(1.08);opacity:.075}}
-@keyframes wlc-b2{0%,100%{transform:rotate(0deg) scale(1.04);opacity:.045}50%{transform:rotate(-5deg) scale(.96);opacity:.07}}
+/* Навч ХӨДЛӨХГҮЙ — зөвхөн 3 брэнд өнгөөр (шар→цэнхэр→ногоон) аажуухан ээлжилнэ.
+   Хэмжээг min()-ээр хязгаарлав — portrait/landscape аль алинд буланд үлдэнэ. */
+.wlc-petal{position:absolute;fill:#009DDE;will-change:fill;
+  animation:wlc-hue 21s ease-in-out infinite}
+.wlc-petal.tr1{top:-22%;right:-14%;width:min(62vw,1200px);opacity:.07;animation-delay:0s}
+.wlc-petal.tr2{top:-30%;right:2%;width:min(42vw,820px);opacity:.06;animation-delay:-3.5s}
+.wlc-petal.tr3{top:6%;right:-8%;width:min(34vw,660px);opacity:.05;animation-delay:-7s}
+.wlc-petal.bl1{bottom:-26%;left:-16%;width:min(60vw,1160px);opacity:.075;animation-delay:-10.5s}
+.wlc-petal.bl2{bottom:-18%;left:-4%;width:min(40vw,780px);opacity:.06;animation-delay:-14s}
+.wlc-petal.bl3{bottom:2%;left:-12%;width:min(30vw,580px);opacity:.05;animation-delay:-17.5s}
+@keyframes wlc-hue{
+  0%,100%{fill:#009DDE}  /* Water — цэнхэр */
+  33%    {fill:#FEB20A}  /* Zoo — шар */
+  66%    {fill:#429547}  /* Forest — ногоон */
+}
 
 /* dots */
 .wlc-dots{position:absolute;inset:0;pointer-events:none;z-index:2}
 .wlc-dot{position:absolute;border-radius:50%;will-change:transform,opacity}
 @keyframes wlc-float{0%,100%{transform:translateY(0);opacity:.85}50%{transform:translateY(-22px);opacity:1}}
 
-/* center */
-.wlc-center{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;
-  gap:clamp(28px,4vh,60px);transform:translateY(-2vh)}
+/* center — absolute+margin:auto-аар аль ч чиглэлд баталгаатай голд (flex-ээс үл хамаарна) */
+.wlc-center{position:absolute;inset:0;margin:auto;width:max-content;height:max-content;
+  z-index:6;display:flex;flex-direction:column;align-items:center;
+  gap:clamp(24px,4vh,56px);max-width:90vw}
 .wlc-logo-wrap{animation:wlc-logoIn 1.4s cubic-bezier(.45,.05,.25,1) both, wlc-logoFloat 9s ease-in-out 1.4s infinite}
 .wlc-logo{width:clamp(180px,16vw,300px);height:auto;display:block;
   filter:drop-shadow(0 10px 30px rgba(0,157,222,.10))}
@@ -165,7 +172,23 @@ img, svg, video {
   width:30%;transform:translateX(-120%);animation:wlc-shine 3.8s cubic-bezier(.45,.05,.25,1) infinite}
 @keyframes wlc-shine{0%{transform:translateX(-120%)}60%,100%{transform:translateX(420%)}}
 
+/* Portrait (босоо) дэлгэц — навч жижгэрч, лого/товч томрох */
+@media (orientation: portrait){
+  .wlc-petal.tr1{width:min(60vw,440px)}
+  .wlc-petal.tr2{width:min(44vw,300px)}
+  .wlc-petal.tr3{width:min(34vw,240px)}
+  .wlc-petal.bl1{width:min(58vw,420px)}
+  .wlc-petal.bl2{width:min(42vw,280px)}
+  .wlc-petal.bl3{width:min(32vw,220px)}
+  .wlc-logo{width:clamp(220px,42vw,360px)}
+  .wlc-touch{width:clamp(130px,26vw,180px);height:clamp(130px,26vw,180px)}
+  .wlc-label{font-size:clamp(18px,3.6vw,26px)}
+  .wlc-slabel{font-size:clamp(13px,2.6vw,17px)}
+}
+
 @media (prefers-reduced-motion:reduce){
   .wlc *{animation:none!important}
   .wlc-petal{opacity:.06}
+  /* анимэйшнгүй үед төв агуулга заавал харагдана */
+  .wlc-logo-wrap,.wlc-touch,.wlc-label{opacity:1!important}
 }

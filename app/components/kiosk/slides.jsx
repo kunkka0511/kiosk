@@ -12,8 +12,8 @@ import {
   GREEN, BLUE, MUSTARD, CHARCOAL, OFFWHITE, SAND, DARK,
   FONT_HEAD, FONT_BRAND, FONT_BODY, FONT_ACCENT,
   A, plan, PLAN_COUNTS, STATS, BLOCKS, BLOCK_NOTE,
-  AMENITIES, INFRA, BRANDS, NEARBY, SHOWROOM, SHOWROOM_INTRO, CONSTRUCTION,
-  CONTACT, SPRING_SOFT,
+  AMENITIES, INFRA, BRANDS, NEARBY, SHOWROOM, CONSTRUCTION,
+  SPRING_SOFT, SALES,
 } from "./tokens";
 import { Media, HeroLotus, SlideDecor, BrandFooter, CountUp, Particles, Heading, SlidePad } from "./ui";
 import { tick } from "./feedback";
@@ -81,50 +81,6 @@ function GlassPad({ children }) {
       {children}
       <BrandFooter />
     </div>
-  );
-}
-
-// ── 3. SHOWROOM / ТАНИЛЦУУЛГА (ард shader урсана) ────────────────────────────
-function SlideShowroom({ reduced }) {
-  const [i, setI] = useState(0);
-  const item = SHOWROOM[i];
-  return (
-    <GlassPad>
-      <SlideDecor reduced={reduced} />
-      <Heading kicker="Танилцуулга" reduced={reduced}>Загвар орон сууц & концепц</Heading>
-      <div style={{ flex: 1, minHeight: 0, display: "grid", gridTemplateColumns: "1.55fr 1fr", gap: "clamp(20px,2.4vw,40px)" }}>
-        {/* том feature зураг */}
-        <div style={{ position: "relative", borderRadius: 22, overflow: "hidden", background: "#fff", boxShadow: "0 24px 70px rgba(0,0,0,0.16)" }}>
-          <AnimatePresence mode="wait">
-            <motion.div key={i} initial={{ opacity: 0, scale: 1.03 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} style={{ position: "absolute", inset: 0 }}>
-              {/* IMG: showroom / render зураг */}
-              <Media src={item.src} grad={item.grad} fit="cover" reduced={reduced} />
-            </motion.div>
-          </AnimatePresence>
-          <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "26px 30px",
-            background: "linear-gradient(to top, rgba(15,20,15,0.78), transparent)", color: "#fff" }}>
-            <div style={{ fontFamily: FONT_HEAD, fontSize: "clamp(22px,2vw,34px)", fontWeight: 700 }}>{item.cap}</div>
-          </div>
-        </div>
-        {/* concept текст + thumbnails */}
-        <div style={{ display: "flex", flexDirection: "column", minHeight: 0 }}>
-          <p style={{ fontFamily: FONT_ACCENT, fontStyle: "italic", fontSize: "clamp(20px,1.7vw,30px)", color: GREEN, lineHeight: 1.4, margin: "0 0 8px" }}>
-            “Гэр бүлдээ үлдээх үнэ цэнтэй хөрөнгө оруулалт”
-          </p>
-          <p style={{ fontSize: "clamp(16px,1.2vw,22px)", color: "#444", lineHeight: 1.55, margin: "0 0 auto" }}>{SHOWROOM_INTRO}</p>
-          <div style={{ display: "flex", gap: 12, marginTop: 18, flexWrap: "wrap" }}>
-            {SHOWROOM.map((s, k) => (
-              <motion.button key={k} onClick={() => setI(k)} whileTap={{ scale: 0.95 }}
-                style={{ position: "relative", width: "clamp(96px,7vw,130px)", aspectRatio: "4/3", borderRadius: 12, overflow: "hidden",
-                  cursor: "pointer", padding: 0, background: "#fff", border: k === i ? `3px solid ${GREEN}` : "2px solid #0001" }}>
-                <Media src={s.src} grad={s.grad} fit="cover" reduced={reduced} />
-              </motion.button>
-            ))}
-          </div>
-        </div>
-      </div>
-    </GlassPad>
   );
 }
 
@@ -433,66 +389,6 @@ function Round({ children, onClick }) {
   );
 }
 
-// ── 5. AMENITIES ─────────────────────────────────────────────────────────────
-// Card дээр дарахад /assets/amenities/<dir>/ доторх зургууд gallery (Lightbox)-оор
-// гарч ирнэ — swipe/‹›-ээр гүйлгэж үзнэ. Зураггүй бол "удахгүй нэмэгдэнэ" гэнэ.
-function SlideAmenities({ reduced }) {
-  const [gallery, setGallery] = useState(null); // { title, images }
-  const [idx, setIdx] = useState(0);
-  const [busy, setBusy] = useState(null);       // ачаалж буй card-ийн индекс
-  const [empty, setEmpty] = useState(null);     // зураггүй card-ийн индекс
-  const count = gallery?.images.length || 0;
-
-  const openCard = async (a, i) => {
-    setEmpty(null);
-    setBusy(i);
-    try {
-      const res = await fetch(`/api/amenities/${a.dir}`);
-      const data = await res.json();
-      if (data.images?.length) { setIdx(0); setGallery({ title: a.title, images: data.images }); }
-      else setEmpty(i);
-    } catch { setEmpty(i); }
-    finally { setBusy(null); }
-  };
-
-  return (
-    <SlidePad>
-      <SlideDecor reduced={reduced} />
-      <Heading kicker="Орчин · AWT амьдрал" reduced={reduced}>Амьдралыг бүрдүүлэх орчин</Heading>
-      <div style={{ flex: 1, minHeight: 0, display: "grid", gridTemplateColumns: "repeat(4,1fr)", gridAutoRows: "1fr", gap: "clamp(14px,1.4vw,24px)", alignContent: "center" }}>
-        {AMENITIES.map((a, i) => {
-          const loading = busy === i;
-          const noimg = empty === i;
-          return (
-            <motion.button key={i} onClick={() => openCard(a, i)}
-              initial={{ opacity: 0, y: reduced ? 0 : 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.06 * i }} whileTap={{ scale: 0.97 }}
-              style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14,
-                padding: "clamp(16px,2.2vh,32px) 14px", borderRadius: 20, cursor: "pointer",
-                background: "#fff", color: CHARCOAL, border: `2px solid ${a.c}22` }}>
-              <div style={{ width: "clamp(72px,5vw,104px)", height: "clamp(72px,5vw,104px)", borderRadius: "50%",
-                background: a.c + "1a", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "clamp(34px,2.8vw,52px)" }}>{a.icon}</div>
-              <div style={{ fontFamily: FONT_HEAD, fontSize: "clamp(16px,1.2vw,23px)", fontWeight: 700, textAlign: "center", lineHeight: 1.2 }}>{a.title}</div>
-              <div style={{ fontSize: "clamp(13px,0.95vw,18px)", textAlign: "center", color: "#777", lineHeight: 1.35 }}>{a.sub}</div>
-              {/* "зураг үзэх" badge */}
-              <span style={{ marginTop: 2, fontSize: "clamp(12px,0.85vw,15px)", fontWeight: 700, color: a.c, opacity: noimg ? 0 : 1 }}>
-                {loading ? "Ачаалж байна…" : "📷 Зураг үзэх"}
-              </span>
-              {noimg && (
-                <span style={{ fontSize: "clamp(12px,0.85vw,15px)", color: "#aaa" }}>Зураг удахгүй нэмэгдэнэ</span>
-              )}
-            </motion.button>
-          );
-        })}
-      </div>
-
-      <Lightbox images={gallery?.images || []} index={gallery ? idx : null} label={gallery?.title}
-        onClose={() => setGallery(null)}
-        onPrev={() => setIdx((v) => (v - 1 + count) % count)}
-        onNext={() => setIdx((v) => (v + 1) % count)} reduced={reduced} />
-    </SlidePad>
-  );
-}
-
 // ── 6. INFRASTRUCTURE ────────────────────────────────────────────────────────
 function SlideInfra({ reduced }) {
   return (
@@ -524,55 +420,132 @@ function SlideInfra({ reduced }) {
   );
 }
 
-// ── 7. LOCATION + CONTACT ────────────────────────────────────────────────────
-// QR код — /assets/qr.png байвал харуулна, ачаалал амжилтгүй бол placeholder.
-// Жинхэнэ QR-аа (захиалга/вэб холбоос) тэр зам дээр тавь → автоматаар гарч ирнэ.
-function ContactQR() {
-  const [ok, setOk] = useState(true);
-  const box = {
-    width: "clamp(96px,8vw,128px)", height: "clamp(96px,8vw,128px)", background: "#fff",
-    borderRadius: 14, flexShrink: 0, overflow: "hidden", display: "flex",
-    flexDirection: "column", alignItems: "center", justifyContent: "center",
-    color: "#999", fontSize: 13, fontWeight: 600, textAlign: "center", padding: 8,
-  };
-  if (!ok) return <div style={box}>QR<br />{CONTACT.qrLabel}</div>;
-  return (
-    <div style={box} title={CONTACT.qrLabel}>
-      <img src={CONTACT.qr} alt={CONTACT.qrLabel} onError={() => setOk(false)}
-        style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-    </div>
-  );
-}
-
+// ── 7. БАЙРШИЛ + ОРЧИН + ТАНИЛЦУУЛГА (нэгтгэсэн нэг хуудас) ───────────────────
 function SlideLocation({ reduced }) {
+  const gallery = [
+    { src: A.renderFinal, cap: "Байршлын төлөвлөлт", grad: ["#9aa3b0", "#5a6a7e"] },
+    ...SHOWROOM,
+  ];
+  const [i, setI] = useState(0);
+  const [lb, setLb] = useState(null);     // { title, images }
+  const [idx, setIdx] = useState(0);
+  const [busy, setBusy] = useState(null);
+  const count = lb?.images.length || 0;
+  const openCard = async (a, k) => {
+    setBusy(k);
+    try {
+      const r = await fetch(`/api/amenities/${a.dir}`);
+      const d = await r.json();
+      if (d.images?.length) { setIdx(0); setLb({ title: a.title, images: d.images }); }
+    } catch { /* алгасах */ } finally { setBusy(null); }
+  };
+
   return (
     <SlidePad>
       <SlideDecor reduced={reduced} />
-      <Heading kicker="Байршил · Хан-Уул дүүрэг · 23-р хороо" kickerColor={BLUE} reduced={reduced}>Яармаг–Арцатын хөндий</Heading>
-      <div style={{ display: "grid", gridTemplateColumns: "1.15fr 1fr", gap: 44, flex: 1, minHeight: 0 }}>
-        <div style={{ position: "relative", borderRadius: 16, overflow: "hidden", background: "#fff", boxShadow: "0 12px 40px rgba(0,0,0,0.08)" }}>
-          {/* IMG: байршлын render / газрын зураг */}
-          <Media src={A.renderFinal} grad={["#9aa3b0", "#5a6a7e"]} fit="contain" bg="#fff" reduced={reduced} />
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", minHeight: 0 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, flex: 1, alignContent: "center" }}>
-            {NEARBY.map((p, i) => (
-              <motion.div key={i} initial={{ opacity: 0, x: reduced ? 0 : 18 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.45, delay: i * 0.05 }}
-                style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 18px", background: "#fff", borderRadius: 14, border: "1px solid #0001" }}>
-                <span style={{ fontSize: "clamp(24px,2vw,34px)" }}>{p.icon}</span>
-                <span style={{ fontSize: "clamp(15px,1.15vw,21px)", fontWeight: 500, lineHeight: 1.25 }}>{p.t}</span>
+      <Heading kicker="Байршил · Орчин · Танилцуулга" kickerColor={BLUE} reduced={reduced}>Хаана, ямар орчинд амьдрах вэ</Heading>
+      <div style={{ flex: 1, minHeight: 0, display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: "clamp(18px,2vw,34px)" }}>
+        {/* ЗҮҮН — танилцуулга / байршлын зураг карусель */}
+        <div style={{ display: "flex", flexDirection: "column", minHeight: 0, gap: 12 }}>
+          <div style={{ position: "relative", flex: 1, minHeight: 0, borderRadius: 20, overflow: "hidden", background: "#fff", boxShadow: "0 20px 60px rgba(0,0,0,0.14)" }}>
+            <AnimatePresence mode="wait">
+              <motion.div key={i} initial={{ opacity: 0, scale: 1.03 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} style={{ position: "absolute", inset: 0 }}>
+                <Media src={gallery[i].src} grad={gallery[i].grad} fit="cover" reduced={reduced} />
               </motion.div>
+            </AnimatePresence>
+            <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "20px 24px", background: "linear-gradient(to top, rgba(15,20,15,0.72), transparent)", color: "#fff" }}>
+              <div style={{ fontFamily: FONT_HEAD, fontSize: "clamp(19px,1.7vw,30px)", fontWeight: 700 }}>{gallery[i].cap}</div>
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 10, overflow: "hidden" }}>
+            {gallery.map((g, k) => (
+              <button key={k} onClick={() => setI(k)} aria-label={g.cap}
+                style={{ flex: "0 0 auto", width: "clamp(78px,5.6vw,116px)", aspectRatio: "4/3", borderRadius: 10, overflow: "hidden", cursor: "pointer", padding: 0, background: "#fff", border: k === i ? `3px solid ${GREEN}` : "2px solid #0001" }}>
+                <Media src={g.src} grad={g.grad} fit="cover" reduced={reduced} />
+              </button>
             ))}
           </div>
-          <div style={{ marginTop: 18, padding: "22px 26px", borderRadius: 18, background: GREEN, color: "#fff", display: "flex", alignItems: "center", gap: 24 }}>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: "clamp(14px,1vw,18px)", opacity: 0.85, marginBottom: 4 }}>Холбоо барих · {CONTACT.hours}</div>
-              <div style={{ fontFamily: FONT_BRAND, fontSize: "clamp(34px,3vw,56px)", fontWeight: 900, letterSpacing: "0.02em" }}>📞 {CONTACT.phone}</div>
+        </div>
+
+        {/* БАРУУН — орчин (дарж зураг үзэх) + ойролцоо */}
+        <div style={{ display: "flex", flexDirection: "column", minHeight: 0, gap: "clamp(12px,1.8vh,20px)" }}>
+          <div>
+            <div style={{ fontFamily: FONT_HEAD, fontWeight: 700, fontSize: "clamp(16px,1.25vw,22px)", color: CHARCOAL, marginBottom: 8 }}>
+              Орчин <span style={{ fontSize: "0.66em", color: "#999", fontWeight: 500 }}>· дарж зураг үзэх</span>
             </div>
-            {/* QR — /assets/qr.png байвал жинхэнэ QR, үгүй бол эвтэйхэн placeholder */}
-            <ContactQR />
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+              {AMENITIES.map((a, k) => (
+                <button key={k} onClick={() => openCard(a, k)} aria-label={a.title}
+                  style={{ display: "flex", alignItems: "center", gap: 9, padding: "9px 11px", borderRadius: 11, cursor: "pointer", background: "#fff", border: `2px solid ${a.c}22`, textAlign: "left", opacity: busy === k ? 0.55 : 1 }}>
+                  <span style={{ fontSize: "clamp(18px,1.4vw,24px)" }}>{a.icon}</span>
+                  <span style={{ fontSize: "clamp(11px,0.9vw,15px)", fontWeight: 600, lineHeight: 1.15 }}>{a.title}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div style={{ minHeight: 0 }}>
+            <div style={{ fontFamily: FONT_HEAD, fontWeight: 700, fontSize: "clamp(16px,1.25vw,22px)", color: CHARCOAL, marginBottom: 8 }}>Ойролцоо</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+              {NEARBY.map((p, k) => (
+                <div key={k} style={{ display: "flex", alignItems: "center", gap: 9, padding: "9px 11px", borderRadius: 11, background: "#fff", border: "1px solid #0001" }}>
+                  <span style={{ fontSize: "clamp(16px,1.3vw,22px)" }}>{p.icon}</span>
+                  <span style={{ fontSize: "clamp(11px,0.85vw,14px)", lineHeight: 1.15 }}>{p.t}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
+      </div>
+
+      <Lightbox images={lb?.images || []} index={lb ? idx : null} label={lb?.title}
+        onClose={() => setLb(null)}
+        onPrev={() => setIdx((v) => (v - 1 + count) % count)}
+        onNext={() => setIdx((v) => (v + 1) % count)} reduced={reduced} />
+    </SlidePad>
+  );
+}
+
+// ── 10. БОРЛУУЛАЛТЫН МЕНЕЖЕРҮҮД (төгсгөлийн CTA — утсаар холбогдох) ───────────
+// Зураг: /assets/salers/ · утас: tokens.js → SALES (хүн бүрээр засна).
+function SlideSales({ reduced }) {
+  return (
+    <SlidePad>
+      <SlideDecor reduced={reduced} />
+      <Heading kicker="Холбоо барих" kickerColor={MUSTARD} reduced={reduced}>Борлуулалтын менежерүүд</Heading>
+      <p style={{ textAlign: "center", maxWidth: 980, margin: "0 auto clamp(18px,2.6vh,38px)",
+        fontSize: "clamp(15px,1.15vw,21px)", color: "#666", lineHeight: 1.4 }}>
+        Манай борлуулалтын менежерүүдтэй утсаар шууд холбогдон төслийн талаар дэлгэрэнгүй мэдээлэл аваарай.
+      </p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "clamp(16px,1.6vw,30px)",
+        flex: 1, minHeight: 0, alignContent: "center" }}>
+        {SALES.map((m, i) => (
+          <motion.div key={i} initial={{ opacity: 0, y: reduced ? 0 : 28 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: i * 0.08 }}
+            style={{ background: "#fff", borderRadius: 20, border: "1px solid rgba(0,0,0,0.06)",
+              boxShadow: "0 14px 44px rgba(0,0,0,0.09)", padding: "clamp(20px,2.6vh,36px) clamp(14px,1.4vw,24px)",
+              display: "flex", flexDirection: "column", alignItems: "center", gap: "clamp(14px,1.8vh,22px)" }}>
+            {/* зураг — брэнд өнгийн дугуй дэвсгэр дээр */}
+            <div style={{ width: "clamp(120px,9vw,178px)", aspectRatio: "1", borderRadius: "50%",
+              overflow: "hidden", background: m.c, flexShrink: 0 }}>
+              <Media src={m.img} grad={[m.c, m.c]} bg={m.c} fit="cover" reduced={reduced} />
+            </div>
+            {/* нэр + албан тушаал */}
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontFamily: FONT_HEAD, fontWeight: 700, fontSize: "clamp(17px,1.4vw,25px)",
+                color: CHARCOAL, textTransform: "uppercase", letterSpacing: "0.02em", lineHeight: 1.1 }}>{m.name}</div>
+              <div style={{ marginTop: 7, fontSize: "clamp(13px,1vw,17px)", color: "#8a8a8a", lineHeight: 1.3 }}>{m.role}</div>
+            </div>
+            {/* утасны дугаар (Холбогдох товчны оронд) */}
+            <a href={`tel:${m.phone.replace(/[^0-9+]/g, "")}`}
+              style={{ marginTop: "auto", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 10,
+                padding: "12px clamp(20px,1.6vw,30px)", borderRadius: 30, border: `2px solid ${MUSTARD}`,
+                color: CHARCOAL, fontFamily: FONT_BRAND, fontWeight: 800, fontSize: "clamp(16px,1.2vw,23px)",
+                letterSpacing: "0.02em", whiteSpace: "nowrap" }}>
+              <span aria-hidden="true">📞</span> {m.phone}
+            </a>
+          </motion.div>
+        ))}
       </div>
     </SlidePad>
   );
@@ -582,12 +555,11 @@ function SlideLocation({ reduced }) {
 export const SLIDES = [
   { name: "Нүүр",               dark: true,  Comp: SlideHero },
   { name: "Тоон үзүүлэлт",      dark: false, Comp: SlideStats },
-  { name: "Танилцуулга",        dark: false, Comp: SlideShowroom },
+  { name: "Орон сууц",          dark: false, Comp: SlideUnits },          // ← давхрын хуваалт, 3-р хуудас
   { name: "Барилгын явц",       dark: false, Comp: SlideConstruction },
   { name: "Ерөнхий төлөвлөгөө", dark: false, Comp: SlideMasterPlan },
-  { name: "Орон сууц",          dark: false, Comp: SlideUnits },
-  { name: "Орчин",              dark: false, Comp: SlideAmenities },
   { name: "Дэд бүтэц",          dark: true,  Comp: SlideInfra },
-  { name: "Байршил",            dark: false, Comp: SlideLocation },
+  { name: "Байршил ба орчин",   dark: false, Comp: SlideLocation },        // ← Байршил + Орчин + Танилцуулга нэгтгэв
+  { name: "Борлуулалтын баг",   dark: false, Comp: SlideSales },
 ];
 

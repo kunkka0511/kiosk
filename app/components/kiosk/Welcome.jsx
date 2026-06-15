@@ -95,7 +95,7 @@ export default function Welcome({ onBegin, reduced }) {
           </div>
         </div>
 
-        <div className="wlc-label">Эхлэхийн тулд дэлгэцэнд хүрнэ үү</div>
+        <div className="wlc-label">Сайнуу Хишигээ, Чаагий, Бархүү, Номио, Хонгороо, Та хэд мундаг шүү</div>
       </div>
 
       {/* swipe hint */}
