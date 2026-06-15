@@ -6,53 +6,43 @@
 //  (AWT concept болон видеотой showcase хуудсуудыг хассан. Cursor эффект нь
 //   глобал — CursorFX.jsx-д бүх слайд дээр ажиллана.)
 // ============================================================================
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  GREEN, BLUE, MUSTARD, CHARCOAL, OFFWHITE, DARK,
+  GREEN, BLUE, MUSTARD, CHARCOAL, OFFWHITE, SAND, DARK,
   FONT_HEAD, FONT_BRAND, FONT_BODY, FONT_ACCENT,
   A, plan, PLAN_COUNTS, STATS, BLOCKS, BLOCK_NOTE,
   AMENITIES, INFRA, BRANDS, NEARBY, SHOWROOM, SHOWROOM_INTRO, CONSTRUCTION,
 } from "./tokens";
-import { Media, MandalaMotif, LotusWatermark, CountUp, Heading, SlidePad } from "./ui";
+import { Media, HeroLotus, SlideDecor, BrandFooter, CountUp, Particles, Heading, SlidePad } from "./ui";
 
 // ── 1. HERO ──────────────────────────────────────────────────────────────────
-//  Гол визуал = хорооллын нэгдсэн төлөвлөлтийн 3D render (бүтэн харагдана).
-//  Cream дэвсгэр (60% давамгай) — render-ийн цайвар фонтой жигд нийлнэ.
-//  Чимэг: ГАНЦ lotus petal булангийн watermark (brand book), текстийн АРД.
 function SlideHero({ reduced }) {
   return (
-    <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: OFFWHITE }}>
-      {/* масштер план render — гол визуал, аажуухан ken-burns */}
-      <motion.div style={{ position: "absolute", inset: 0, zIndex: 1 }}
-        initial={reduced ? {} : { scale: 1.06 }} animate={{ scale: 1 }} transition={{ duration: 12, ease: "easeOut" }}>
-        {/* IMG: нэгдсэн төлөвлөлт 3D render — цэвэр (шошгогүй) хувилбараар солих (A.heroPlan) */}
-        <Media src={A.heroPlan} grad={["#cfd6dd", "#9aa3b0"]} fit="contain" bg={OFFWHITE} reduced={reduced} />
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
+      <motion.div style={{ position: "absolute", inset: 0 }}
+        initial={reduced ? {} : { scale: 1.08 }} animate={{ scale: 1 }} transition={{ duration: 9, ease: "easeOut" }}>
+        {/* IMG: hero байгалийн дэвсгэр (drone/lifestyle render) */}
+        <Media src={A.hero} grad={["#7c9a6b", "#3f5b46", "#22332a"]} reduced={reduced} />
       </motion.div>
+      <div style={{ position: "absolute", inset: 0,
+        background: "linear-gradient(120deg, rgba(46,125,50,0.78) 0%, rgba(33,55,42,0.55) 45%, rgba(33,33,33,0.4) 100%)" }} />
+      <HeroLotus />
+      <Particles count={20} reduced={reduced} />
 
-      {/* доод хэсэгт текст уншихад зориулсан зөөлөн cream scrim */}
-      <div style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
-        background: "linear-gradient(to top, rgba(254,251,246,0.97) 0%, rgba(254,251,246,0.78) 20%, rgba(254,251,246,0) 44%)" }} />
-
-      {/* ЧИМЭГ — lotus petal corner watermark (Forest ногоон, цайвар дэвсгэр дээр 8%) */}
-      <LotusWatermark size={460} color={GREEN} opacity={0.08} style={{ right: -120, bottom: -130, zIndex: 3 }} />
-
-      {/* лого — top-left */}
-      <img src={A.logo} alt="Mandala Garden"
-        style={{ position: "absolute", top: "clamp(28px,4vh,48px)", left: "7vw", zIndex: 4,
-          width: "clamp(96px,9vw,150px)", height: "auto", filter: "drop-shadow(0 2px 10px rgba(0,0,0,0.12))" }} />
-
-      {/* hero текст — доод зүүн */}
-      <div style={{ position: "absolute", left: "7vw", right: "7vw", bottom: "clamp(56px,8vh,96px)", zIndex: 4, color: CHARCOAL }}>
-        <p style={{ fontFamily: FONT_ACCENT, fontStyle: "italic", fontSize: "clamp(22px,2vw,38px)", color: GREEN, margin: "0 0 14px" }}>
+      <div style={{ position: "relative", zIndex: 2, height: "100%", display: "flex", flexDirection: "column",
+        justifyContent: "center", padding: "0 7vw", color: "#fff" }}>
+        <img src={A.logo} alt="Mandala Garden"
+          style={{ width: "clamp(96px,9vw,150px)", height: "auto", marginBottom: 28, filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.35))" }} />
+        <p style={{ fontFamily: FONT_ACCENT, fontStyle: "italic", fontSize: "clamp(22px,2vw,38px)", color: SAND, margin: "0 0 14px" }}>
           Байгальтай зохицсон амьдрах орчин
         </p>
-        <h1 style={{ fontFamily: FONT_HEAD, fontSize: "clamp(40px,4.4vw,76px)", fontWeight: 700, lineHeight: 1.06, margin: 0, maxWidth: 980, color: CHARCOAL }}>
+        <h1 style={{ fontFamily: FONT_HEAD, fontSize: "clamp(40px,4.4vw,76px)", fontWeight: 700, lineHeight: 1.06, margin: 0, maxWidth: 880 }}>
           Гэр бүлдээ үлдээх <span style={{ color: MUSTARD }}>үнэ цэнтэй</span> хөрөнгө оруулалт
         </h1>
-        <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 24, fontSize: "clamp(16px,1.3vw,22px)", color: "#666" }}>
-          <span style={{ fontWeight: 900, color: GREEN, fontFamily: FONT_BRAND, letterSpacing: "0.08em" }}>AWT</span>
-          Animal · Water · Tree · Яармаг–Арцатын хөндий · 10 га · 14 блок
+        <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 24, fontSize: "clamp(16px,1.3vw,22px)", color: "rgba(255,255,255,0.85)" }}>
+          <span style={{ fontWeight: 700, color: MUSTARD, fontFamily: FONT_BRAND, letterSpacing: "0.08em" }}>AWT</span>
+          Animal · Water · Tree · Яармаг–Арцатын хөндий · 10 га · 24 блок
         </div>
       </div>
     </div>
@@ -63,7 +53,7 @@ function SlideHero({ reduced }) {
 function SlideStats({ reduced }) {
   return (
     <SlidePad>
-      <MandalaMotif size={520} color={GREEN} opacity={0.05} reduced={reduced} style={{ right: "-120px", bottom: "-120px" }} />
+      <SlideDecor reduced={reduced} />
       <Heading kicker="Төслийн тоо баримт" reduced={reduced}>Цар хүрээгээ тоогоор</Heading>
       <div style={{ display: "grid", gridTemplateColumns: `repeat(${STATS.length},1fr)`, gap: "clamp(18px,2vw,38px)",
         flex: 1, alignContent: "center", position: "relative" }}>
@@ -87,6 +77,7 @@ function GlassPad({ children }) {
     <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: "transparent",
       padding: "clamp(64px,8vh,96px) 7vw clamp(56px,7vh,96px)", display: "flex", flexDirection: "column", fontFamily: FONT_BODY }}>
       {children}
+      <BrandFooter />
     </div>
   );
 }
@@ -97,6 +88,7 @@ function SlideShowroom({ reduced }) {
   const item = SHOWROOM[i];
   return (
     <GlassPad>
+      <SlideDecor reduced={reduced} />
       <Heading kicker="Танилцуулга" reduced={reduced}>Загвар орон сууц & концепц</Heading>
       <div style={{ flex: 1, minHeight: 0, display: "grid", gridTemplateColumns: "1.55fr 1fr", gap: "clamp(20px,2.4vw,40px)" }}>
         {/* том feature зураг */}
@@ -135,38 +127,56 @@ function SlideShowroom({ reduced }) {
 }
 
 // ── 4. БАРИЛГЫН ЯВЦ (construction progress, ард shader) ──────────────────────
+// Зургуудыг /assets/toim/ folder-аас (API) дуудна. Folder-т зураг хийхэд л харагдана.
+// Файлын нэр "2025.03 …" хэлбэртэй бол огноо/тайлбар badge гарч ирнэ; үгүй бол зүгээр зураг.
 function SlideConstruction({ reduced }) {
+  const [items, setItems] = useState(CONSTRUCTION); // эхлэл/fallback
   const [i, setI] = useState(CONSTRUCTION.length - 1);
-  const item = CONSTRUCTION[i];
+
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/toim").then((r) => r.json()).then((d) => {
+      if (alive && d.items?.length) { setItems(d.items); setI(d.items.length - 1); }
+    }).catch(() => {});
+    return () => { alive = false; };
+  }, []);
+
+  const item = items[i] || items[0];
   return (
     <GlassPad>
+      <SlideDecor reduced={reduced} />
       <Heading kicker="Барилгын явц" kickerColor={MUSTARD} reduced={reduced}>Ажлын явцын тойм</Heading>
       <div style={{ flex: 1, minHeight: 0, position: "relative", borderRadius: 22, overflow: "hidden", background: "#fff", boxShadow: "0 24px 70px rgba(0,0,0,0.16)" }}>
         <AnimatePresence mode="wait">
           <motion.div key={i} initial={{ opacity: 0, scale: 1.03 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} style={{ position: "absolute", inset: 0 }}>
-            {/* IMG: барилгын явцын drone зураг (огноогоор) */}
+            {/* IMG: /assets/toim/ доторх зураг */}
             <Media src={item.src} grad={item.grad} fit="cover" reduced={reduced} />
           </motion.div>
         </AnimatePresence>
-        {/* огнооны badge */}
-        <div style={{ position: "absolute", top: 22, left: 22, background: MUSTARD, color: CHARCOAL, padding: "10px 20px",
-          borderRadius: 30, fontFamily: FONT_BRAND, fontWeight: 900, fontSize: "clamp(18px,1.5vw,28px)" }}>{item.date}</div>
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "26px 30px",
-          background: "linear-gradient(to top, rgba(15,20,15,0.78), transparent)", color: "#fff" }}>
-          <div style={{ fontFamily: FONT_HEAD, fontSize: "clamp(22px,2vw,34px)", fontWeight: 700 }}>{item.label}</div>
-        </div>
+        {/* огнооны badge — зөвхөн файлын нэр огноотой бол */}
+        {item.date && (
+          <div style={{ position: "absolute", top: 22, left: 22, background: MUSTARD, color: CHARCOAL, padding: "10px 20px",
+            borderRadius: 30, fontFamily: FONT_BRAND, fontWeight: 900, fontSize: "clamp(18px,1.5vw,28px)" }}>{item.date}</div>
+        )}
+        {/* тайлбар — зөвхөн байвал */}
+        {item.label && (
+          <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "26px 30px",
+            background: "linear-gradient(to top, rgba(15,20,15,0.78), transparent)", color: "#fff" }}>
+            <div style={{ fontFamily: FONT_HEAD, fontSize: "clamp(22px,2vw,34px)", fontWeight: 700 }}>{item.label}</div>
+          </div>
+        )}
       </div>
-      {/* огнооны timeline thumbnails */}
-      <div style={{ display: "flex", gap: 14, marginTop: 16, justifyContent: "center" }}>
-        {CONSTRUCTION.map((c, k) => (
-          <motion.button key={k} onClick={() => setI(k)} whileTap={{ scale: 0.96 }}
+      {/* thumbnails — огноо байвал огноо, үгүй бол дугаар */}
+      <div style={{ display: "flex", gap: 14, marginTop: 16, justifyContent: "center", flexWrap: "wrap" }}>
+        {items.map((c, k) => (
+          <motion.button key={c.src || k} onClick={() => setI(k)} whileTap={{ scale: 0.96 }}
             style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, cursor: "pointer", border: "none", background: "transparent" }}>
             <div style={{ width: "clamp(120px,9vw,170px)", aspectRatio: "16/9", borderRadius: 12, overflow: "hidden",
               border: k === i ? `3px solid ${MUSTARD}` : "2px solid #0002" }}>
               <Media src={c.src} grad={c.grad} fit="cover" reduced={reduced} />
             </div>
-            <span style={{ fontSize: "clamp(13px,1vw,18px)", fontWeight: 700, color: k === i ? CHARCOAL : "#888" }}>{c.date}</span>
+            <span style={{ fontSize: "clamp(13px,1vw,18px)", fontWeight: 700, color: k === i ? CHARCOAL : "#888" }}>{c.date || `${k + 1}`}</span>
           </motion.button>
         ))}
       </div>
@@ -181,7 +191,8 @@ function SlideMasterPlan({ reduced }) {
   return (
     <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: OFFWHITE, display: "flex", flexDirection: "column",
       padding: "clamp(36px,4.5vh,60px) clamp(32px,3vw,64px) clamp(16px,2.5vh,32px)", fontFamily: FONT_BODY }}>
-      <Heading kicker="Ерөнхий төлөвлөгөө · Нийт 14 блок" reduced={reduced}>Нэгдсэн төлөвлөлт</Heading>
+      <SlideDecor reduced={reduced} />
+      <Heading kicker="Ерөнхий төлөвлөгөө · Нийт 24 блок" reduced={reduced}>Нэгдсэн төлөвлөлт</Heading>
 
       {/* ТОМ зураг — үлдсэн орон зайг бүтэн дүүргэнэ, tap → fullscreen */}
       <motion.button onClick={() => setZoom(true)} whileTap={{ scale: 0.995 }}
@@ -226,6 +237,7 @@ function SlideUnits({ reduced }) {
 
   return (
     <SlidePad>
+      <SlideDecor reduced={reduced} />
       <Heading kicker="Орон сууц · 2–4 өрөө · 47–126 м²" kickerColor={BLUE} reduced={reduced}>Айл бүрийн давхрын хуваалт</Heading>
 
       {/* блок сонголт */}
@@ -322,28 +334,61 @@ function Round({ children, onClick }) {
 }
 
 // ── 5. AMENITIES ─────────────────────────────────────────────────────────────
+// Card дээр дарахад /assets/amenities/<dir>/ доторх зургууд gallery (Lightbox)-оор
+// гарч ирнэ — swipe/‹›-ээр гүйлгэж үзнэ. Зураггүй бол "удахгүй нэмэгдэнэ" гэнэ.
 function SlideAmenities({ reduced }) {
-  const [open, setOpen] = useState(null);
+  const [gallery, setGallery] = useState(null); // { title, images }
+  const [idx, setIdx] = useState(0);
+  const [busy, setBusy] = useState(null);       // ачаалж буй card-ийн индекс
+  const [empty, setEmpty] = useState(null);     // зураггүй card-ийн индекс
+  const count = gallery?.images.length || 0;
+
+  const openCard = async (a, i) => {
+    setEmpty(null);
+    setBusy(i);
+    try {
+      const res = await fetch(`/api/amenities/${a.dir}`);
+      const data = await res.json();
+      if (data.images?.length) { setIdx(0); setGallery({ title: a.title, images: data.images }); }
+      else setEmpty(i);
+    } catch { setEmpty(i); }
+    finally { setBusy(null); }
+  };
+
   return (
     <SlidePad>
+      <SlideDecor reduced={reduced} />
       <Heading kicker="Орчин · AWT амьдрал" reduced={reduced}>Амьдралыг бүрдүүлэх орчин</Heading>
       <div style={{ flex: 1, minHeight: 0, display: "grid", gridTemplateColumns: "repeat(4,1fr)", gridAutoRows: "1fr", gap: "clamp(14px,1.4vw,24px)", alignContent: "center" }}>
         {AMENITIES.map((a, i) => {
-          const on = open === i;
+          const loading = busy === i;
+          const noimg = empty === i;
           return (
-            <motion.button key={i} onClick={() => setOpen(on ? null : i)}
+            <motion.button key={i} onClick={() => openCard(a, i)}
               initial={{ opacity: 0, y: reduced ? 0 : 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.06 * i }} whileTap={{ scale: 0.97 }}
-              style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14,
+              style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14,
                 padding: "clamp(16px,2.2vh,32px) 14px", borderRadius: 20, cursor: "pointer",
-                background: on ? a.c : "#fff", color: on ? "#fff" : CHARCOAL, border: `2px solid ${on ? a.c : "#0001"}` }}>
+                background: "#fff", color: CHARCOAL, border: `2px solid ${a.c}22` }}>
               <div style={{ width: "clamp(72px,5vw,104px)", height: "clamp(72px,5vw,104px)", borderRadius: "50%",
-                background: on ? "rgba(255,255,255,0.22)" : a.c + "1a", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "clamp(34px,2.8vw,52px)" }}>{a.icon}</div>
+                background: a.c + "1a", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "clamp(34px,2.8vw,52px)" }}>{a.icon}</div>
               <div style={{ fontFamily: FONT_HEAD, fontSize: "clamp(16px,1.2vw,23px)", fontWeight: 700, textAlign: "center", lineHeight: 1.2 }}>{a.title}</div>
-              <div style={{ fontSize: "clamp(13px,0.95vw,18px)", textAlign: "center", color: on ? "rgba(255,255,255,0.85)" : "#777", lineHeight: 1.35 }}>{a.sub}</div>
+              <div style={{ fontSize: "clamp(13px,0.95vw,18px)", textAlign: "center", color: "#777", lineHeight: 1.35 }}>{a.sub}</div>
+              {/* "зураг үзэх" badge */}
+              <span style={{ marginTop: 2, fontSize: "clamp(12px,0.85vw,15px)", fontWeight: 700, color: a.c, opacity: noimg ? 0 : 1 }}>
+                {loading ? "Ачаалж байна…" : "📷 Зураг үзэх"}
+              </span>
+              {noimg && (
+                <span style={{ fontSize: "clamp(12px,0.85vw,15px)", color: "#aaa" }}>Зураг удахгүй нэмэгдэнэ</span>
+              )}
             </motion.button>
           );
         })}
       </div>
+
+      <Lightbox images={gallery?.images || []} index={gallery ? idx : null} label={gallery?.title}
+        onClose={() => setGallery(null)}
+        onPrev={() => setIdx((v) => (v - 1 + count) % count)}
+        onNext={() => setIdx((v) => (v + 1) % count)} reduced={reduced} />
     </SlidePad>
   );
 }
@@ -352,7 +397,7 @@ function SlideAmenities({ reduced }) {
 function SlideInfra({ reduced }) {
   return (
     <SlidePad bg={DARK}>
-      <MandalaMotif size={560} color={GREEN} opacity={0.1} reduced={reduced} style={{ right: "-130px", top: "-100px" }} />
+      <SlideDecor reduced={reduced} tone="dark" />
       <Heading kicker="Инженерийн шийдэл" kickerColor={MUSTARD} light reduced={reduced}>Найдвартай дэд бүтэц</Heading>
       <div style={{ position: "relative", display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "clamp(24px,2.4vw,44px)" }}>
         {INFRA.map((it, i) => (
@@ -383,6 +428,7 @@ function SlideInfra({ reduced }) {
 function SlideLocation({ reduced }) {
   return (
     <SlidePad>
+      <SlideDecor reduced={reduced} />
       <Heading kicker="Байршил · Хан-Уул дүүрэг · 23-р хороо" kickerColor={BLUE} reduced={reduced}>Яармаг–Арцатын хөндий</Heading>
       <div style={{ display: "grid", gridTemplateColumns: "1.15fr 1fr", gap: 44, flex: 1, minHeight: 0 }}>
         <div style={{ position: "relative", borderRadius: 16, overflow: "hidden", background: "#fff", boxShadow: "0 12px 40px rgba(0,0,0,0.08)" }}>

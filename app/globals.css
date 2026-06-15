@@ -36,3 +36,28 @@ html, body {
   touch-action: manipulation;
   user-select: none;
 }
+
+/* ── Hero corner lotus watermark (garden pattern.svg-ийн outline хувилбар) ──
+   Зөвхөн зураас (stroke), цагаан бага opacity-тэй, аажуухан "амьсгалах". */
+@keyframes lotus-breathe {
+  0%, 100% { transform: rotate(-4deg) scale(1.0);  opacity: 0.12; }
+  50%      { transform: rotate(4deg)  scale(1.05); opacity: 0.20; }
+}
+.hero-lotus {
+  position: absolute;
+  top: -8%; right: -5%;
+  width: 40%; height: auto;
+  transform-origin: top right;
+  animation: lotus-breathe 16s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+.hero-lotus svg { display: block; width: 100%; height: auto; }
+.hero-lotus svg path {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1.5;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-lotus { animation: none; opacity: 0.16; }
+}
