@@ -29,6 +29,22 @@ export const IDLE_ATTRACT_MS = 60000; // 60с хүрэлцэхгүй бол attr
 export const IDLE_RESET_MS   = 90000; // 90с хүрэлцэхгүй бол slide 1 рүү
 export const ATTRACT_STEP_MS = 7000;  // attract үед slide солих хурд
 
+// ── Хөдөлгөөний нэгдсэн preset (бүх слайд нэг "хэмнэлтэй" мэдрэмжтэй) ─────────
+export const SPRING_SNAP = { type: "spring", stiffness: 320, damping: 36 };            // slide snap
+export const SPRING_SOFT = { type: "spring", stiffness: 180, damping: 28, mass: 0.9 }; // coverflow/зөөлөн
+export const EASE_OUT    = [0.22, 1, 0.36, 1];                                         // fade/scale кривэ
+
+// ── Холбоо барих / lead-capture ─────────────────────────────────────────────
+// QR: /public/assets/qr.png-д жинхэнэ QR (захиалга/вэб холбоос) тавь. Байхгүй бол
+// эвтэйхэн placeholder харагдана. Утас/цаг/линкийг энд нэг л газар засна.
+export const CONTACT = {
+  phone:   "7575-8000",
+  hours:   "Загварын байр · 09:00–18:00",
+  url:     "https://mandalagarden.mn",
+  qr:      "/assets/qr.png",
+  qrLabel: "Үзлэг захиалах",
+};
+
 // ── Медиа замууд (/public/assets) ───────────────────────────────────────────
 // /* IMG */ = жинхэнэ drone/render/floor plan-аар солих боломжтой байрлал.
 export const A = {

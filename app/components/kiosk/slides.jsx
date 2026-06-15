@@ -13,8 +13,10 @@ import {
   FONT_HEAD, FONT_BRAND, FONT_BODY, FONT_ACCENT,
   A, plan, PLAN_COUNTS, STATS, BLOCKS, BLOCK_NOTE,
   AMENITIES, INFRA, BRANDS, NEARBY, SHOWROOM, SHOWROOM_INTRO, CONSTRUCTION,
+  CONTACT, SPRING_SOFT,
 } from "./tokens";
 import { Media, HeroLotus, SlideDecor, BrandFooter, CountUp, Particles, Heading, SlidePad } from "./ui";
+import { tick } from "./feedback";
 
 // ── 1. HERO ──────────────────────────────────────────────────────────────────
 function SlideHero({ reduced }) {
@@ -129,6 +131,32 @@ function SlideShowroom({ reduced }) {
 // ── 4. БАРИЛГЫН ЯВЦ (construction progress, ард shader) ──────────────────────
 // Зургуудыг /assets/toim/ folder-аас (API) дуудна. Folder-т зураг хийхэд л харагдана.
 // Файлын нэр "2025.03 …" хэлбэртэй бол огноо/тайлбар badge гарч ирнэ; үгүй бол зүгээр зураг.
+// ApeChain маягийн 3D coverflow — голын карт том, хажуугийнх rotateY-ээр ар тал руу эргэнэ.
+function coverOffset(index, current, total) {
+  const raw = index - current;
+  const half = total / 2;
+  if (raw > half) return raw - total;
+  if (raw < -half) return raw + total;
+  return raw;
+}
+
+function coverPose(offset) {
+  const side = Math.sign(offset);
+  const dist = Math.abs(offset);
+  if (offset === 0) {
+    return { x: "0%", rotateY: -7, z: 0, scale: 1, opacity: 1, zIndex: 40, filter: "brightness(1)" };
+  }
+  if (dist > 2) {
+    return { x: `${side * 118}%`, rotateY: -side * 52, z: -560, scale: 0.62, opacity: 0, zIndex: 10, filter: "brightness(0.3)" };
+  }
+  const x = dist === 1 ? side * 58 : side * 96;
+  const rotY = -side * (dist === 1 ? 42 : 50);
+  const z = dist === 1 ? -210 : -400;
+  const scale = dist === 1 ? 0.85 : 0.72;
+  const bright = dist === 1 ? 0.55 : 0.38;
+  return { x: `${x}%`, rotateY: rotY, z, scale, opacity: 1, zIndex: 40 - dist, filter: `brightness(${bright})` };
+}
+
 function SlideConstruction({ reduced }) {
   const [items, setItems] = useState(CONSTRUCTION); // эхлэл/fallback
   const [i, setI] = useState(CONSTRUCTION.length - 1);
@@ -141,42 +169,114 @@ function SlideConstruction({ reduced }) {
     return () => { alive = false; };
   }, []);
 
-  const item = items[i] || items[0];
+  const total = items.length || 1;
+  const go = (step) => { tick(); setI((v) => (v + step + total) % total); };
+
+  // зөөлөн авто-эргэлт — гар хүрэх/солих бүрт дахин эхэлнэ (5с)
+  useEffect(() => {
+    if (reduced || total <= 1) return;
+    const t = setTimeout(() => setI((v) => (v + 1) % total), 5000);
+    return () => clearTimeout(t);
+  }, [i, total, reduced]);
+
+  const navBtn = {
+    width: "clamp(56px,4.4vw,72px)", height: "clamp(56px,4.4vw,72px)", borderRadius: "50%",
+    border: "2px solid transparent", cursor: "pointer", display: "grid", placeItems: "center",
+    color: "#fff", fontSize: "clamp(22px,1.8vw,30px)", lineHeight: 1,
+    background: "linear-gradient(#0c2018,#0c2018) padding-box, linear-gradient(135deg," + MUSTARD + "," + BLUE + "," + GREEN + ") border-box",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.28)",
+  };
+
   return (
     <GlassPad>
-      <SlideDecor reduced={reduced} />
+      {/* дэвсгэр — cream + топографик цагираган шугам (ApeChain contour vibe) */}
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
+        background: "radial-gradient(circle at 50% 8%, rgba(255,255,255,0.8), transparent 40%), linear-gradient(135deg, #e9f3ed 0%, #f6f3e7 48%, #dcebe1 100%)" }} />
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none", opacity: 0.5,
+        background:
+          "repeating-radial-gradient(circle at 12% 86%, transparent 0 46px, rgba(66,149,71,0.07) 46px 48px)," +
+          "repeating-radial-gradient(circle at 90% 14%, transparent 0 52px, rgba(0,157,222,0.06) 52px 54px)" }} />
+      <SlideDecor reduced tone="light" />
       <Heading kicker="Барилгын явц" kickerColor={MUSTARD} reduced={reduced}>Ажлын явцын тойм</Heading>
-      <div style={{ flex: 1, minHeight: 0, position: "relative", borderRadius: 22, overflow: "hidden", background: "#fff", boxShadow: "0 24px 70px rgba(0,0,0,0.16)" }}>
-        <AnimatePresence mode="wait">
-          <motion.div key={i} initial={{ opacity: 0, scale: 1.03 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} style={{ position: "absolute", inset: 0 }}>
-            {/* IMG: /assets/toim/ доторх зураг */}
-            <Media src={item.src} grad={item.grad} fit="cover" reduced={reduced} />
-          </motion.div>
-        </AnimatePresence>
-        {/* огнооны badge — зөвхөн файлын нэр огноотой бол */}
-        {item.date && (
-          <div style={{ position: "absolute", top: 22, left: 22, background: MUSTARD, color: CHARCOAL, padding: "10px 20px",
-            borderRadius: 30, fontFamily: FONT_BRAND, fontWeight: 900, fontSize: "clamp(18px,1.5vw,28px)" }}>{item.date}</div>
-        )}
-        {/* тайлбар — зөвхөн байвал */}
-        {item.label && (
-          <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "26px 30px",
-            background: "linear-gradient(to top, rgba(15,20,15,0.78), transparent)", color: "#fff" }}>
-            <div style={{ fontFamily: FONT_HEAD, fontSize: "clamp(22px,2vw,34px)", fontWeight: 700 }}>{item.label}</div>
-          </div>
-        )}
+
+      {/* 3D coverflow тайз */}
+      <div style={{ flex: 1, minHeight: 0, position: "relative", margin: "-2vh -7vw 0" }}>
+        <motion.div
+          drag={reduced ? false : "x"}
+          dragDirectionLock
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.3}
+          dragMomentum={false}
+          onDragEnd={(_e, info) => {
+            const power = info.offset.x + info.velocity.x * 0.22;
+            if (power < -70) go(1);
+            else if (power > 70) go(-1);
+          }}
+          style={{ position: "absolute", inset: 0, touchAction: "pan-y" }}>
+          {items.map((c, k) => {
+            const offset = coverOffset(k, i, total);
+            const pose = coverPose(offset);
+            const isActive = offset === 0;
+            return (
+              <motion.button key={c.src || k} onClick={() => setI(k)}
+                aria-label={c.label || c.date || `Зураг ${k + 1}`}
+                whileTap={isActive ? { scale: 0.99 } : {}}
+                animate={reduced
+                  ? { x: pose.x, rotateY: 0, z: 0, scale: isActive ? 1 : 0.8, opacity: Math.abs(offset) > 1 ? 0 : 1, zIndex: pose.zIndex, filter: pose.filter }
+                  : pose}
+                transition={SPRING_SOFT}
+                style={{ position: "absolute", inset: 0, margin: "auto",
+                  width: "min(48vw,880px)", height: "min(54vh,560px)",
+                  transformPerspective: 1500, transformOrigin: "center center",
+                  zIndex: pose.zIndex, padding: 0, border: "none", cursor: "pointer",
+                  borderRadius: 22, overflow: "hidden", background: "#0c1410",
+                  boxShadow: isActive ? "0 40px 110px rgba(0,0,0,0.42)" : "0 24px 64px rgba(0,0,0,0.3)",
+                  outline: "1px solid rgba(255,255,255,0.08)" }}>
+                <Media src={c.src} grad={c.grad} fit="cover" reduced={reduced} />
+                <div style={{ position: "absolute", inset: 0, pointerEvents: "none", background: isActive
+                  ? "linear-gradient(to top, rgba(8,16,11,0.82) 0%, rgba(8,16,11,0.18) 40%, transparent 68%)"
+                  : "rgba(4,8,6,0.32)" }} />
+                {/* идэвхтэй карт дээр л date + label overlay (ApeChain маягаар доод-зүүн) */}
+                {isActive && (c.date || c.label) && (
+                  <div style={{ position: "absolute", left: "clamp(24px,2.4vw,40px)", right: 24, bottom: "clamp(24px,3vh,40px)",
+                    textAlign: "left", color: "#fff" }}>
+                    {c.date && (
+                      <span style={{ display: "inline-block", background: MUSTARD, color: CHARCOAL,
+                        padding: "8px 18px", borderRadius: 30, fontFamily: FONT_BRAND, fontWeight: 900,
+                        fontSize: "clamp(15px,1.25vw,24px)", marginBottom: 14, letterSpacing: "0.02em" }}>{c.date}</span>
+                    )}
+                    {c.label && (
+                      <div style={{ fontFamily: FONT_HEAD, fontSize: "clamp(28px,3.4vw,60px)", fontWeight: 800,
+                        lineHeight: 1.02, textShadow: "0 4px 24px rgba(0,0,0,0.5)" }}>{c.label}</div>
+                    )}
+                  </div>
+                )}
+              </motion.button>
+            );
+          })}
+        </motion.div>
+
+        {/* stacked дугуй nav товч — баруун ирмэг (ApeChain маягаар) */}
+        <div style={{ position: "absolute", right: "2.5vw", top: "50%", transform: "translateY(-50%)", zIndex: 60,
+          display: "flex", flexDirection: "column", gap: 16 }}>
+          <button onClick={() => go(1)} aria-label="Дараагийн зураг" style={navBtn}>›</button>
+          <button onClick={() => go(-1)} aria-label="Өмнөх зураг" style={navBtn}>‹</button>
+        </div>
       </div>
-      {/* thumbnails — огноо байвал огноо, үгүй бол дугаар */}
-      <div style={{ display: "flex", gap: 14, marginTop: 16, justifyContent: "center", flexWrap: "wrap" }}>
+
+      {/* thumbnail зурвас — доор (огноо байвал огноо, үгүй бол дугаар) */}
+      <div style={{ display: "flex", gap: 12, marginTop: 14, justifyContent: "center", alignItems: "center", flexWrap: "nowrap", overflow: "hidden" }}>
         {items.map((c, k) => (
-          <motion.button key={c.src || k} onClick={() => setI(k)} whileTap={{ scale: 0.96 }}
-            style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, cursor: "pointer", border: "none", background: "transparent" }}>
-            <div style={{ width: "clamp(120px,9vw,170px)", aspectRatio: "16/9", borderRadius: 12, overflow: "hidden",
-              border: k === i ? `3px solid ${MUSTARD}` : "2px solid #0002" }}>
+          <motion.button key={c.src || k} onClick={() => setI(k)} whileTap={{ scale: 0.94 }}
+            aria-label={c.date || `Зураг ${k + 1}`}
+            animate={{ opacity: k === i ? 1 : 0.55 }}
+            style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, cursor: "pointer", border: "none", background: "transparent", flex: "0 0 auto" }}>
+            <div style={{ width: "clamp(96px,7vw,140px)", aspectRatio: "16/9", borderRadius: 10, overflow: "hidden",
+              border: k === i ? `3px solid ${MUSTARD}` : "2px solid rgba(0,0,0,0.12)",
+              boxShadow: k === i ? "0 6px 18px rgba(0,0,0,0.2)" : "none", transition: "border 0.25s" }}>
               <Media src={c.src} grad={c.grad} fit="cover" reduced={reduced} />
             </div>
-            <span style={{ fontSize: "clamp(13px,1vw,18px)", fontWeight: 700, color: k === i ? CHARCOAL : "#888" }}>{c.date || `${k + 1}`}</span>
+            <span style={{ fontSize: "clamp(12px,0.9vw,16px)", fontWeight: 700, color: k === i ? CHARCOAL : "#9aa39c" }}>{c.date || `${k + 1}`}</span>
           </motion.button>
         ))}
       </div>
@@ -425,6 +525,25 @@ function SlideInfra({ reduced }) {
 }
 
 // ── 7. LOCATION + CONTACT ────────────────────────────────────────────────────
+// QR код — /assets/qr.png байвал харуулна, ачаалал амжилтгүй бол placeholder.
+// Жинхэнэ QR-аа (захиалга/вэб холбоос) тэр зам дээр тавь → автоматаар гарч ирнэ.
+function ContactQR() {
+  const [ok, setOk] = useState(true);
+  const box = {
+    width: "clamp(96px,8vw,128px)", height: "clamp(96px,8vw,128px)", background: "#fff",
+    borderRadius: 14, flexShrink: 0, overflow: "hidden", display: "flex",
+    flexDirection: "column", alignItems: "center", justifyContent: "center",
+    color: "#999", fontSize: 13, fontWeight: 600, textAlign: "center", padding: 8,
+  };
+  if (!ok) return <div style={box}>QR<br />{CONTACT.qrLabel}</div>;
+  return (
+    <div style={box} title={CONTACT.qrLabel}>
+      <img src={CONTACT.qr} alt={CONTACT.qrLabel} onError={() => setOk(false)}
+        style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+    </div>
+  );
+}
+
 function SlideLocation({ reduced }) {
   return (
     <SlidePad>
@@ -447,12 +566,11 @@ function SlideLocation({ reduced }) {
           </div>
           <div style={{ marginTop: 18, padding: "22px 26px", borderRadius: 18, background: GREEN, color: "#fff", display: "flex", alignItems: "center", gap: 24 }}>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: "clamp(14px,1vw,18px)", opacity: 0.85, marginBottom: 4 }}>Холбоо барих · Загварын байр 09:00–18:00</div>
-              <div style={{ fontFamily: FONT_BRAND, fontSize: "clamp(34px,3vw,56px)", fontWeight: 900, letterSpacing: "0.02em" }}>📞 7575-8000</div>
+              <div style={{ fontSize: "clamp(14px,1vw,18px)", opacity: 0.85, marginBottom: 4 }}>Холбоо барих · {CONTACT.hours}</div>
+              <div style={{ fontFamily: FONT_BRAND, fontSize: "clamp(34px,3vw,56px)", fontWeight: 900, letterSpacing: "0.02em" }}>📞 {CONTACT.phone}</div>
             </div>
-            {/* QR: загварын байр / вэб холбоосын QR код тавих зай */}
-            <div style={{ width: "clamp(96px,8vw,128px)", height: "clamp(96px,8vw,128px)", background: "#fff", borderRadius: 14,
-              display: "flex", alignItems: "center", justifyContent: "center", color: "#999", fontSize: 14, fontWeight: 600, textAlign: "center", flexShrink: 0 }}>QR<br />код</div>
+            {/* QR — /assets/qr.png байвал жинхэнэ QR, үгүй бол эвтэйхэн placeholder */}
+            <ContactQR />
           </div>
         </div>
       </div>

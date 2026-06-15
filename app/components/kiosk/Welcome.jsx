@@ -7,6 +7,7 @@
 // ============================================================================
 import { useEffect, useRef, useState } from "react";
 import { A } from "./tokens";
+import { tick } from "./feedback";
 
 const COLORS = ["#FEB20A", "#009DDE", "#429547"];
 const SPOTS = [
@@ -24,6 +25,7 @@ export default function Welcome({ onBegin, reduced }) {
   const begin = () => {
     if (done.current) return;
     done.current = true;
+    tick(620, 0.06);
     setExiting(true);
     setTimeout(() => onBegin && onBegin(), reduced ? 0 : 1000);
   };

@@ -12,12 +12,14 @@
 // ============================================================================
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { GREEN, CHARCOAL, FONT_BODY, FONT_ACCENT, A, IDLE_ATTRACT_MS, IDLE_RESET_MS, ATTRACT_STEP_MS } from "./tokens";
+import { GREEN, CHARCOAL, FONT_BODY, FONT_ACCENT, A, SHOWROOM, IDLE_ATTRACT_MS, IDLE_RESET_MS, ATTRACT_STEP_MS, SPRING_SNAP } from "./tokens";
 import { useReducedMotion } from "./ui";
 import { SLIDES } from "./slides";
 import CursorFX from "./CursorFX";
 import ShaderBackground from "./ShaderBackground";
 import Welcome from "./Welcome";
+import KioskGuards from "./KioskGuards";
+import { tick } from "./feedback";
 
 const COUNT = SLIDES.length;
 const SWIPE_THRESHOLD = 90; // px — snap хийх босго (offset + velocity нийлбэр)
@@ -57,9 +59,20 @@ export default function MandalaKiosk() {
 
   // welcome дээр tap/swipe → танилцуулга нээх
   const handleBegin = useCallback(() => {
+    tick();
     setWelcome(false);
     setAttract(false);
     setS([0, 0]);
+  }, []);
+
+  // зургуудыг урьдчилж ачаалах — слайд солиход "анивчихгүй"
+  useEffect(() => {
+    const urls = [
+      A.hero, A.masterPlan, A.renderFinal, A.awt,
+      A.res1, A.res2, A.res3,
+      ...SHOWROOM.map((s) => s.src),
+    ].filter(Boolean);
+    urls.forEach((u) => { const im = new Image(); im.src = u; });
   }, []);
 
   // attract үед slide аажуухан автоматаар солигдоно
@@ -83,8 +96,8 @@ export default function MandalaKiosk() {
   const onDragEnd = (_e, info) => {
     bump();
     const power = info.offset.x + info.velocity.x * 0.25;
-    if (power < -SWIPE_THRESHOLD && slide < COUNT - 1) { setHasSwiped(true); next(); }
-    else if (power > SWIPE_THRESHOLD && slide > 0) { setHasSwiped(true); prev(); }
+    if (power < -SWIPE_THRESHOLD && slide < COUNT - 1) { tick(); setHasSwiped(true); next(); }
+    else if (power > SWIPE_THRESHOLD && slide > 0) { tick(); setHasSwiped(true); prev(); }
   };
 
   const variants = {
@@ -100,12 +113,15 @@ export default function MandalaKiosk() {
     <div onPointerDown={welcome ? undefined : bump}
       style={{ position: "fixed", inset: 0, overflow: "hidden", background: "transparent", fontFamily: FONT_BODY, color: CHARCOAL }}>
 
+      {/* Kiosk хатуужил — right-click/zoom/gesture хаах */}
+      <KioskGuards />
+
       {/* WebGL shader background — бүх контентын ард (z-index 0) */}
       <ShaderBackground />
 
       <AnimatePresence custom={dir} initial={false}>
         <motion.div key={slide} custom={dir} variants={variants} initial="enter" animate="center" exit="exit"
-          transition={{ x: { type: "spring", stiffness: 320, damping: 36 }, opacity: { duration: 0.35 } }}
+          transition={{ x: SPRING_SNAP, opacity: { duration: 0.35 } }}
           // ── ГАРААР SWIPE ──
           drag={reduced ? false : "x"}
           dragDirectionLock
@@ -163,7 +179,7 @@ export default function MandalaKiosk() {
             style={{ position: "fixed", inset: 0, zIndex: 80, pointerEvents: "none", display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: 120 }}>
             <motion.div animate={reduced ? {} : { y: [0, -10, 0], opacity: [0.75, 1, 0.75] }} transition={{ duration: 2.2, repeat: Infinity }}
               style={{ background: GREEN, color: "#fff", padding: "18px 42px", borderRadius: 44, fontSize: "clamp(18px,1.4vw,28px)", fontWeight: 700, boxShadow: "0 10px 40px rgba(0,0,0,0.4)" }}>
-              👆 Тавтай морил
+              👆 Эхлэхийн тулд дэлгэцэд хүрнэ үү
             </motion.div>
           </motion.div>
         )}
