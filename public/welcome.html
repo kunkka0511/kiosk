@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Mandala Garden — Тавтай морил</title>
+<style>
+  /* ====================================================================
+     MANDALA GARDEN — KIOSK WELCOME / IDLE SCREEN
+     Self-contained. No libraries. 1920×1080 landscape, scales to fill.
+     Brand: yellow #FEB20A · blue #009DDE · green #429547 · bg #EAFCFD
+     ==================================================================== */
+  :root{
+    --yellow:#FEB20A;
+    --blue:#009DDE;
+    --green:#429547;
+    --bg:#EAFCFD;
+    --ink:#5a6b6e;
+    --ease:cubic-bezier(.45,.05,.25,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;width:100%;overflow:hidden;background:#fff}
+  body{
+    font-family:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    cursor:none;
+  }
+
+  /* ---- root layer: handles the exit transition ---- */
+  .welcome{
+    position:fixed;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    background:
+      radial-gradient(120% 120% at 50% 42%, #ffffff 0%, var(--bg) 60%, #dff4f8 100%);
+    transition:opacity 1s var(--ease), transform 1.1s var(--ease), filter 1s var(--ease);
+    will-change:opacity,transform;
+    overflow:hidden;
+  }
+  .welcome.exit{
+    opacity:0;
+    transform:scale(1.06) translateX(-3%);
+    filter:blur(6px);
+    pointer-events:none;
+  }
+
+  /* ============================ PETALS ============================ */
+  .petals{position:absolute;inset:0;pointer-events:none;z-index:1}
+  .petal{
+    position:absolute;
+    fill:var(--blue);
+    transform-origin:center;
+    will-change:transform,opacity;
+  }
+  /* top-right cluster */
+  .petal.tr1{top:-22%;right:-14%;width:62vw;opacity:.06;
+    animation:breathe1 26s var(--ease) infinite}
+  .petal.tr2{top:-30%;right:2%;width:42vw;opacity:.05;
+    animation:breathe2 31s var(--ease) infinite}
+  .petal.tr3{top:6%;right:-8%;width:34vw;opacity:.045;
+    animation:breathe1 23s var(--ease) infinite reverse}
+  /* bottom-left cluster */
+  .petal.bl1{bottom:-26%;left:-16%;width:60vw;opacity:.065;
+    animation:breathe2 28s var(--ease) infinite}
+  .petal.bl2{bottom:-18%;left:-4%;width:40vw;opacity:.05;
+    animation:breathe1 33s var(--ease) infinite reverse}
+  .petal.bl3{bottom:2%;left:-12%;width:30vw;opacity:.04;
+    animation:breathe2 24s var(--ease) infinite}
+
+  @keyframes breathe1{
+    0%,100%{transform:rotate(0deg) scale(1);opacity:.05}
+    50%{transform:rotate(6deg) scale(1.08);opacity:.075}
+  }
+  @keyframes breathe2{
+    0%,100%{transform:rotate(0deg) scale(1.04);opacity:.045}
+    50%{transform:rotate(-5deg) scale(.96);opacity:.07}
+  }
+
+  /* ============================ DOTS ============================ */
+  .dots{position:absolute;inset:0;pointer-events:none;z-index:2}
+  .dot{position:absolute;border-radius:50%;will-change:transform,opacity}
+  @keyframes float{
+    0%,100%{transform:translateY(0);opacity:.85}
+    50%{transform:translateY(-22px);opacity:1}
+  }
+
+  /* ============================ CENTER ============================ */
+  .center{
+    position:relative;z-index:5;
+    display:flex;flex-direction:column;align-items:center;
+    gap:clamp(28px,4vh,60px);
+    transform:translateY(-2vh);
+  }
+  .logo-wrap{
+    animation:logoIn 1.4s var(--ease) both, logoFloat 9s ease-in-out 1.4s infinite;
+  }
+  .logo{
+    width:clamp(180px,16vw,300px);height:auto;display:block;
+    filter:drop-shadow(0 10px 30px rgba(0,157,222,.10));
+  }
+  @keyframes logoIn{
+    from{opacity:0;transform:translateY(18px) scale(.96)}
+    to{opacity:1;transform:translateY(0) scale(1)}
+  }
+  @keyframes logoFloat{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-10px)}
+  }
+
+  /* ---- touch button + pulse rings ---- */
+  .touch{
+    position:relative;
+    width:clamp(120px,9vw,160px);
+    height:clamp(120px,9vw,160px);
+    display:flex;align-items:center;justify-content:center;
+    animation:fadeUp 1.2s var(--ease) .5s both;
+  }
+  .ring{
+    position:absolute;inset:0;margin:auto;
+    width:100%;height:100%;border-radius:50%;
+    border:2px solid var(--blue);
+    opacity:0;
+    animation:pulse 2.6s var(--ease) infinite;
+  }
+  .ring.r2{animation-delay:.85s;border-color:var(--green)}
+  .ring.r3{animation-delay:1.7s;border-color:var(--yellow)}
+  @keyframes pulse{
+    0%{transform:scale(.55);opacity:.55}
+    70%{opacity:.12}
+    100%{transform:scale(2.2);opacity:0}
+  }
+  .circle{
+    position:relative;z-index:2;
+    width:62%;height:62%;border-radius:50%;
+    background:radial-gradient(circle at 38% 32%,#ffffff, #f1fbfd 70%);
+    border:1.5px solid rgba(0,157,222,.25);
+    box-shadow:0 8px 24px rgba(0,157,222,.14), inset 0 1px 2px #fff;
+    display:flex;align-items:center;justify-content:center;
+    overflow:visible;
+  }
+  /* contact ripple inside the circle, synced with the finger tap */
+  .circle::after{
+    content:"";position:absolute;left:50%;top:54%;
+    width:14px;height:14px;border-radius:50%;
+    border:2px solid var(--blue);
+    transform:translate(-50%,-50%) scale(.2);
+    opacity:0;
+    animation:contact 3.4s var(--ease) infinite;
+  }
+  @keyframes contact{
+    0%,55%{transform:translate(-50%,-50%) scale(.2);opacity:0}
+    62%{opacity:.6}
+    90%,100%{transform:translate(-50%,-50%) scale(3.4);opacity:0}
+  }
+  .hand{
+    width:48%;height:48%;
+    color:var(--ink);
+    animation:tap 3.4s var(--ease) infinite;
+    transform-origin:60% 30%;
+  }
+  @keyframes tap{
+    0%,50%{transform:translateY(-3px) rotate(0deg)}
+    60%{transform:translateY(4px) rotate(-3deg)}
+    72%{transform:translateY(-3px) rotate(0deg)}
+    100%{transform:translateY(-3px)}
+  }
+
+  .label{
+    font-size:clamp(15px,1.25vw,22px);
+    letter-spacing:.04em;
+    color:var(--ink);
+    font-weight:500;
+    animation:labelPulse 3.6s ease-in-out infinite, fadeUp 1.2s var(--ease) .8s both;
+  }
+  @keyframes labelPulse{0%,100%{opacity:.55}50%{opacity:1}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ============================ SWIPE HINT ============================ */
+  .swipe{
+    position:absolute;left:0;right:0;bottom:clamp(34px,5vh,70px);
+    z-index:5;
+    display:flex;flex-direction:column;align-items:center;gap:18px;
+    pointer-events:none;
+  }
+  .chevrons{display:flex;gap:6px;align-items:center}
+  .chevrons span{
+    width:14px;height:14px;
+    border-top:3px solid var(--blue);
+    border-right:3px solid var(--blue);
+    transform:rotate(45deg);
+    opacity:.25;
+    animation:chev 1.8s var(--ease) infinite;
+  }
+  .chevrons span:nth-child(2){animation-delay:.18s;border-color:var(--green)}
+  .chevrons span:nth-child(3){animation-delay:.36s;border-color:var(--yellow)}
+  @keyframes chev{
+    0%{opacity:.18;transform:rotate(45deg) translate(-4px,4px)}
+    50%{opacity:.9}
+    100%{opacity:.18;transform:rotate(45deg) translate(6px,-6px)}
+  }
+  .swipe-label{
+    font-size:clamp(12px,.95vw,16px);letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink);opacity:.5;font-weight:600;
+  }
+  .gline{
+    width:min(70vw,1180px);height:3px;border-radius:3px;overflow:hidden;
+    background:linear-gradient(90deg,
+      var(--yellow) 0%, var(--yellow) 30%,
+      var(--blue) 38%, var(--blue) 66%,
+      var(--green) 74%, var(--green) 100%);
+    position:relative;
+  }
+  .gline::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(90deg,transparent, rgba(255,255,255,.85), transparent);
+    width:30%;transform:translateX(-120%);
+    animation:shine 3.8s var(--ease) infinite;
+  }
+  @keyframes shine{0%{transform:translateX(-120%)}60%,100%{transform:translateX(420%)}}
+
+  /* ---- custom soft cursor ---- */
+  .cursor{
+    position:fixed;top:0;left:0;z-index:50;pointer-events:none;
+    width:26px;height:26px;border-radius:50%;
+    border:2px solid rgba(0,157,222,.6);
+    background:radial-gradient(circle,rgba(0,157,222,.18),transparent 70%);
+    transform:translate(-50%,-50%);
+    transition:width .15s,height .15s,background .15s;
+    will-change:transform;
+  }
+  .cursor.press{width:40px;height:40px;background:radial-gradient(circle,rgba(0,157,222,.32),transparent 70%)}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+  <div class="welcome" id="welcome">
+
+    <!-- ===== background petals ===== -->
+    <div class="petals">
+      <!-- a single soft leaf/vesica shape reused & transformed -->
+      <svg class="petal tr1" viewBox="0 0 200 280"><path d="M100 6C150 70 150 210 100 274 50 210 50 70 100 6Z"/></svg>
+      <svg class="petal tr2" viewBox="0 0 200 280" style="transform:rotate(38deg)"><path d="M100 6C150 70 150 210 100 274 50 210 50 70 100 6Z"/></svg>
+      <svg class="petal tr3" viewBox="0 0 200 280" style="transform:rotate(-26deg)"><path d="M100 6C150 70 150 210 100 274 50 210 50 70 100 6Z"/></svg>
+      <svg class="petal bl1" viewBox="0 0 200 280"><path d="M100 6C150 70 150 210 100 274 50 210 50 70 100 6Z"/></svg>
+      <svg class="petal bl2" viewBox="0 0 200 280" style="transform:rotate(42deg)"><path d="M100 6C150 70 150 210 100 274 50 210 50 70 100 6Z"/></svg>
+      <svg class="petal bl3" viewBox="0 0 200 280" style="transform:rotate(-32deg)"><path d="M100 6C150 70 150 210 100 274 50 210 50 70 100 6Z"/></svg>
+    </div>
+
+    <!-- ===== accent dots (filled by JS for varied offsets) ===== -->
+    <div class="dots" id="dots"></div>
+
+    <!-- ===== center call to action ===== -->
+    <div class="center">
+      <div class="logo-wrap">
+        <img class="logo" src="/assets/logo/mandala-garden-logo.png" alt="Mandala Garden" />
+      </div>
+
+      <div class="touch">
+        <span class="ring r1"></span>
+        <span class="ring r2"></span>
+        <span class="ring r3"></span>
+        <div class="circle">
+          <!-- line-art tap hand -->
+          <svg class="hand" viewBox="0 0 64 64" fill="none" stroke="currentColor"
+               stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M26 30V14a5 5 0 0 1 10 0v18"/>
+            <path d="M36 26a4 4 0 0 1 8 0v8"/>
+            <path d="M44 28a4 4 0 0 1 8 0v12c0 9-6 16-16 16h-4c-6 0-9-2-12-7l-7-12a4 4 0 0 1 7-4l4 6"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="label">Эхлэхийн тулд дэлгэцэнд хүрнэ үү</div>
+    </div>
+
+    <!-- ===== swipe affordance ===== -->
+    <div class="swipe">
+      <div class="chevrons"><span></span><span></span><span></span></div>
+      <div class="swipe-label">Шудран эхлүүлнэ үү</div>
+      <div class="gline"></div>
+    </div>
+
+  </div>
+
+  <div class="cursor" id="cursor"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---- scatter accent dots with varied size / position / timing ---- */
+  var COLORS = ["#FEB20A","#009DDE","#429547"];
+  var SPOTS = [
+    {x:17,y:31,s:18},{x:32,y:67,s:13},{x:11,y:78,s:14},{x:10,y:80,s:9},
+    {x:74,y:62,s:8},{x:88,y:81,s:11},{x:64,y:84,s:10},{x:62,y:82,s:7},
+    {x:94,y:84,s:20},{x:48,y:22,s:7},{x:83,y:30,s:9},{x:24,y:48,s:6}
+  ];
+  var box = document.getElementById("dots");
+  SPOTS.forEach(function(p,i){
+    var d = document.createElement("span");
+    d.className = "dot";
+    d.style.left = p.x + "%";
+    d.style.top = p.y + "%";
+    d.style.width = d.style.height = p.s + "px";
+    d.style.background = COLORS[i % COLORS.length];
+    d.style.opacity = (0.55 + (i%4)*0.12).toFixed(2);
+    d.style.animation = "float " + (5 + (i%5)) + "s ease-in-out " + (i*0.4).toFixed(1) + "s infinite";
+    box.appendChild(d);
+  });
+
+  /* ---- soft custom cursor ---- */
+  var cur = document.getElementById("cursor");
+  window.addEventListener("pointermove", function(e){
+    cur.style.transform = "translate(" + e.clientX + "px," + e.clientY + "px) translate(-50%,-50%)";
+  });
+  window.addEventListener("pointerdown", function(){ cur.classList.add("press"); });
+  window.addEventListener("pointerup",   function(){ cur.classList.remove("press"); });
+
+  /* ---- tap / swipe to begin -> exit, then notify the host ---- */
+  var welcome = document.getElementById("welcome");
+  var done = false;
+  function begin(){
+    if(done) return;
+    done = true;
+    welcome.classList.add("exit");
+    // next screen handled separately; emit an event + postMessage for the host
+    setTimeout(function(){
+      window.dispatchEvent(new CustomEvent("welcome:begin"));
+      try{ if(window.parent !== window) window.parent.postMessage({type:"welcome:begin"},"*"); }catch(e){}
+    }, 1000);
+  }
+
+  // tap anywhere
+  window.addEventListener("pointerup", function(){ /* taps without movement */ });
+  var sx=0, sy=0, st=0;
+  window.addEventListener("pointerdown", function(e){ sx=e.clientX; sy=e.clientY; st=Date.now(); });
+  window.addEventListener("pointerup", function(e){
+    var dx = e.clientX - sx, dy = e.clientY - sy, dt = Date.now() - st;
+    var moved = Math.hypot(dx,dy);
+    // a quick tap (little movement, short time) OR a horizontal swipe both begin
+    if((moved < 14 && dt < 600) || Math.abs(dx) > 60) begin();
+  });
+  // keyboard / wheel fallbacks for desktop testing
+  window.addEventListener("keydown", function(e){
+    if(e.key==="Enter"||e.key===" "||e.key==="ArrowRight") begin();
+  });
+})();
+</script>
+</body>
+</html>

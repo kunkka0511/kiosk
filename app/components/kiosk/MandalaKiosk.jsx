@@ -17,6 +17,7 @@ import { useReducedMotion } from "./ui";
 import { SLIDES } from "./slides";
 import CursorFX from "./CursorFX";
 import ShaderBackground from "./ShaderBackground";
+import Welcome from "./Welcome";
 
 const COUNT = SLIDES.length;
 const SWIPE_THRESHOLD = 90; // px — snap хийх босго (offset + velocity нийлбэр)
@@ -26,6 +27,7 @@ export default function MandalaKiosk() {
   const [[slide, dir], setS] = useState([0, 0]);
   const [hasSwiped, setHasSwiped] = useState(false);
   const [attract, setAttract] = useState(false);
+  const [welcome, setWelcome] = useState(true); // эхлэх дэлгэц — анх нээгдэхэд
   const attractTimer = useRef(null);
   const resetTimer = useRef(null);
 
@@ -33,18 +35,32 @@ export default function MandalaKiosk() {
   const prev = useCallback(() => setS(([s]) => [Math.max(s - 1, 0), -1]), []);
 
   // хүрэлцээ болгонд idle timer-уудыг reset
+  //  60с — attract (slide-ууд автоматаар гүйнэ) · 90с — welcome дэлгэц рүү буцна
   const bump = useCallback(() => {
     setAttract(false);
     clearTimeout(attractTimer.current);
     clearTimeout(resetTimer.current);
     attractTimer.current = setTimeout(() => { setAttract(true); setS([0, 1]); }, IDLE_ATTRACT_MS);
-    resetTimer.current = setTimeout(() => { setS([0, 0]); }, IDLE_RESET_MS);
+    resetTimer.current = setTimeout(() => { setWelcome(true); setAttract(false); setS([0, 0]); }, IDLE_RESET_MS);
   }, []);
 
+  // welcome дэлгэц дээр timer ажиллахгүй — tap хүлээж зогсоно
   useEffect(() => {
+    if (welcome) {
+      clearTimeout(attractTimer.current);
+      clearTimeout(resetTimer.current);
+      return;
+    }
     bump();
     return () => { clearTimeout(attractTimer.current); clearTimeout(resetTimer.current); };
-  }, [bump]);
+  }, [bump, welcome]);
+
+  // welcome дээр tap/swipe → танилцуулга нээх
+  const handleBegin = useCallback(() => {
+    setWelcome(false);
+    setAttract(false);
+    setS([0, 0]);
+  }, []);
 
   // attract үед slide аажуухан автоматаар солигдоно
   useEffect(() => {
@@ -81,7 +97,7 @@ export default function MandalaKiosk() {
   const Active = SLIDES[slide].Comp;
 
   return (
-    <div onPointerDown={bump}
+    <div onPointerDown={welcome ? undefined : bump}
       style={{ position: "fixed", inset: 0, overflow: "hidden", background: "transparent", fontFamily: FONT_BODY, color: CHARCOAL }}>
 
       {/* WebGL shader background — бүх контентын ард (z-index 0) */}
@@ -152,6 +168,13 @@ export default function MandalaKiosk() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* WELCOME / IDLE дэлгэц — chrome бүгдийн дээр (z 90), hand cursor (z 95) дээгүүр нь хөвнө */}
+      {welcome && (
+        <div style={{ position: "absolute", inset: 0, zIndex: 90 }}>
+          <Welcome onBegin={handleBegin} reduced={reduced} />
+        </div>
+      )}
     </div>
   );
 }
