@@ -35,7 +35,7 @@ const A = {
   renderFinal: "/assets/images/final.png",
 };
 const plan = (block, n = 1) => encodeURI(`/assets/${block} (${n}).png`);
-const PLAN_COUNTS = { "201": 0, "202": 8, "203": 7, "204": 7, "205": 7 };
+const PLAN_COUNTS = { "201": 8, "202": 8, "203": 7, "204": 7, "205": 7 };
 
 // ─── Reduced motion ─────────────────────────────────────────────────────────────
 function useReducedMotion() {
@@ -198,7 +198,7 @@ function Pill({ children, onClick, variant = "green", style }) {
 // ─── Дата ───────────────────────────────────────────────────────────────────────
 const STATS = [
   { n: 14,  s: "",   label: "Нийт блок" },
-  { n: 10,  s: " га", label: "Газрын талбай" },
+  { n: 15,  s: " га", label: "Газрын талбай" },
   { n: 2,   s: "",   label: "Цахилгааны эх үүсвэр" },
   { n: 600, s: " м", label: "Үерийн усны далан" },
   { n: 100, s: "%",  label: "PPR цэвэр усны хоолой" },
@@ -212,8 +212,8 @@ const AWT = [
     desc: "Өргөн ногоон байгууламж, мод тарьсан зүлэгжүүлэлт, эрүүл амьсгал." },
 ];
 const BLOCKS = [
-  { name: "201", x: "36.5%", y: "51%",   area: "47.90–105.55", rooms: "2–4 өрөө", handover: "2027 II улирал" },
-  { name: "202", x: "27.3%", y: "52.5%", area: "47.91–81.02",  rooms: "2–3 өрөө", handover: "2026–2027" },
+  { name: "201", x: "36.5%", y: "51%",   area: "47.90–96.53",  rooms: "2–3 өрөө", handover: "2027 II улирал" },
+  { name: "202", x: "27.3%", y: "52.5%", area: "47.91–105.55", rooms: "2–4 өрөө", handover: "2026–2027" },
   { name: "203", x: "30%",   y: "40.5%", area: "48.65–124.06", rooms: "2–4 өрөө", handover: "2026–2027" },
   { name: "204", x: "26.8%", y: "30%",   area: "47.55–105.84", rooms: "2–4 өрөө", handover: "2026–2027" },
   { name: "205", x: "34.5%", y: "29.5%", area: "48.69–125.86", rooms: "2–4 өрөө", handover: "2026–2027" },
@@ -234,9 +234,11 @@ const INFRA = [
   { icon: "🌊", k: "Үерийн ус", v: "600 м далан", d: "100 жилийн дундаж үерийг тооцсон хамгаалалт." },
 ];
 const BRANDS = [
+  { k: "DemirDöküm / Universal", d: "Радиатор" },
   { k: "Egger", d: "Паркет" }, { k: "VEKA / Firatpen", d: "Цонх" },
   { k: "Torex", d: "Гадна хаалга" }, { k: "Legrand", d: "Цахилгаан" },
-  { k: "TOTO / INAX", d: "Ариун цэврийн тоног" },
+  { k: "LX Hausys", d: "Шалны трап" },
+  { k: "TOTO / Grohe / INAX / LIXIL", d: "Ариун цэврийн тоног" },
 ];
 const NEARBY = [
   { icon: "🏬", t: "Хүннү молл" }, { icon: "🎓", t: "British / Smart / Tomyo сургууль" },
@@ -297,7 +299,7 @@ function SlideHero({ reduced, onStart }) {
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 24,
           fontSize: "clamp(16px,1.3vw,22px)", color: "rgba(255,255,255,0.85)" }}>
           <span style={{ fontWeight: 700, color: MUSTARD, fontFamily: FONT_BRAND, letterSpacing: "0.08em" }}>AWT</span>
-          Animal · Water · Tree · Яармаг–Арцатын хөндий · 10 га · 14 блок
+          Animal · Water · Tree · Яармаг–Арцатын хөндий · 15 га · 24 блок
         </div>
         <div style={{ marginTop: 40 }}>
           <Pill onClick={onStart}>Танилцуулга эхлэх →</Pill>

@@ -44,7 +44,7 @@ function SlideHero({ reduced }) {
         </h1>
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 24, fontSize: "clamp(16px,1.3vw,22px)", color: "rgba(255,255,255,0.85)" }}>
           <span style={{ fontWeight: 700, color: MUSTARD, fontFamily: FONT_BRAND, letterSpacing: "0.08em" }}>AWT</span>
-          Animal · Water · Tree · Яармаг–Арцатын хөндий · 10 га · 24 блок
+          Animal · Water · Tree · Яармаг–Арцатын хөндий · 15 га · 24 блок
         </div>
       </div>
     </div>
@@ -283,7 +283,7 @@ function SlideMasterPlan({ reduced }) {
 // Зураг бүр өөртөө талбай + өрөөний задаргааг агуулсан мэргэжлийн plan. Зүүн талд
 // ТОМ зураг, баруун талд бусад айлын thumbnail (ДЭЭШ/ДООШ swipe). Tap → бүтэн дэлгэц.
 function SlideUnits({ reduced }) {
-  const blocks = BLOCKS.filter((b) => PLAN_COUNTS[b.name] > 0); // 202–205
+  const blocks = BLOCKS.filter((b) => PLAN_COUNTS[b.name] > 0); // 201–205
   const [block, setBlock] = useState(blocks[0].name);
   const [idx, setIdx] = useState(0);
   const [box, setBox] = useState(false);

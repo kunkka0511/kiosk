@@ -18,7 +18,7 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: "Mandala Garden — Байгальтай зохицсон амьдрах орчин",
-  description: "AWT — Animal · Water · Tree. Яармаг–Арцатын хөндий, 10 га, 14 блок.",
+  description: "AWT — Animal · Water · Tree. Яармаг–Арцатын хөндий, 15 га, 24 блок.",
 };
 
 export default function RootLayout({

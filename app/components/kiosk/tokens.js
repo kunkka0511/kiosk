@@ -61,14 +61,14 @@ export const A = {
   res2:       "/assets/images/residences/2uruu.jpg",
   res3:       "/assets/images/residences/3uruu.jpg",
 };
-// Блокийн давхрын хуваалт: /assets/202 (1).png ... /assets/205 (7).png
+// Блокийн давхрын хуваалт: /assets/201 (1).png ... /assets/205 (7).png
 export const plan = (block, n = 1) => encodeURI(`/assets/${block} (${n}).png`);
-export const PLAN_COUNTS = { "201": 0, "202": 8, "203": 7, "204": 7, "205": 7 };
+export const PLAN_COUNTS = { "201": 8, "202": 8, "203": 7, "204": 7, "205": 7 };
 
 // ── Тоон үзүүлэлт ───────────────────────────────────────────────────────────
 export const STATS = [
   { n: 24,  s: "",    label: "Нийт блок",              c: GREEN },
-  { n: 10,  s: " га", label: "Газрын талбай",          c: BLUE },
+  { n: 15,  s: " га", label: "Газрын талбай",          c: BLUE },
   { n: 2,   s: "",    label: "Цахилгааны эх үүсвэр",    c: MUSTARD },
   { n: 600, s: " м",  label: "Үерийн усны далан",       c: GREEN },
   { n: 100, s: "%",   label: "PPR цэвэр усны хоолой",    c: BLUE },
@@ -87,11 +87,11 @@ export const AWT = [
 // ── Блокийн жинхэнэ дата (master plan) ──────────────────────────────────────
 // badge = брэндийн ялгах өнгө, x/y = "All edited.jpg" дээрх hotspot байрлал.
 export const BLOCKS = [
-  { name: "201", x: "36.5%", y: "51%",   rooms: "2–4 өрөө", area: "47.9–105.6",  handover: "2027 II улирал", badge: "#E8536B" },
-  { name: "202", x: "27.3%", y: "52.5%", rooms: "2–3 өрөө", area: "47.9–81.0",   handover: "2026–2027",      badge: "#5B8DD9" },
-  { name: "203", x: "30%",   y: "40.5%", rooms: "2–4 өрөө", area: "48.7–124.1",  handover: "2026–2027",      badge: "#F0A020" },
-  { name: "204", x: "26.8%", y: "30%",   rooms: "2–4 өрөө", area: "47.6–105.8",  handover: "2026–2027",      badge: "#6BB36B" },
-  { name: "205", x: "34.5%", y: "29.5%", rooms: "2–4 өрөө", area: "48.7–125.9",  handover: "2026–2027",      badge: "#B57BD0" },
+  { name: "201", x: "36.5%", y: "51%",   rooms: "2–3 өрөө", area: "47.90–96.53",  handover: "2027 II улирал", badge: "#E8536B" },
+  { name: "202", x: "27.3%", y: "52.5%", rooms: "2–4 өрөө", area: "47.91–105.55", handover: "2026–2027",      badge: "#5B8DD9" },
+  { name: "203", x: "30%",   y: "40.5%", rooms: "2–4 өрөө", area: "48.65–124.06", handover: "2026–2027",      badge: "#F0A020" },
+  { name: "204", x: "26.8%", y: "30%",   rooms: "2–4 өрөө", area: "47.55–105.84", handover: "2026–2027",      badge: "#6BB36B" },
+  { name: "205", x: "34.5%", y: "29.5%", rooms: "2–4 өрөө", area: "48.69–125.86", handover: "2026–2027",      badge: "#B57BD0" },
 ];
 export const BLOCK_NOTE = "Талбайн хэмжээ дундаж бөгөөд давхрын сонголтоос хамаарч өөрчлөгдөнө.";
 export const FLOOR_BLOCKS = BLOCKS.filter((b) => PLAN_COUNTS[b.name] > 0);
@@ -115,11 +115,13 @@ export const INFRA = [
   { icon: "🌊", k: "Үерийн ус", v: "600 м далан",  d: "100 жилийн дундаж үерийг тооцсон хамгаалалт.",     c: MUSTARD },
 ];
 export const BRANDS = [
+  { k: "DemirDöküm / Universal", d: "Радиатор" },
   { k: "Egger",          d: "Паркет" },
   { k: "VEKA / Firatpen",d: "Цонх" },
   { k: "Torex",          d: "Гадна хаалга" },
   { k: "Legrand",        d: "Цахилгаан" },
-  { k: "TOTO / INAX",    d: "Ариун цэврийн тоног" },
+  { k: "LX Hausys",      d: "Шалны трап" },
+  { k: "TOTO / Grohe / INAX / LIXIL", d: "Ариун цэврийн тоног" },
 ];
 
 // ── Showroom / танилцуулга зургууд ──────────────────────────────────────────
