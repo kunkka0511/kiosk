@@ -99,29 +99,29 @@ export const FLOOR_BLOCKS = BLOCKS.filter((b) => PLAN_COUNTS[b.name] > 0);
 // ── Орчин (amenities) ───────────────────────────────────────────────────────
 // dir = /public/assets/amenities/<dir>/ — энд зураг хийхэд card дээр дарж gallery-гээр харна.
 export const AMENITIES = [
-  { icon: "🧒", title: "Хүүхдийн тоглоомын талбай", sub: "3–5 · 6–8 · 8–12 насны ангилал", c: MUSTARD, dir: "playground" },
-  { icon: "🏀", title: "3×3 сагсан бөмбөг",          sub: "Спортын талбай",               c: BLUE,    dir: "basketball" },
-  { icon: "🌳", title: "Ногоон байгууламж",          sub: "AWT зүлэгжүүлэлт",              c: GREEN,   dir: "green" },
-  { icon: "🦌", logo: "/assets/logo/zoo-garden.png", title: "Zoo Garden парк", sub: "Animal Garden · II хэсэг", c: MUSTARD, dir: "awt-park" },
-  { icon: "🏫", title: "Сургууль",                    sub: "Хороололд багтсан",            c: BLUE,    dir: "school" },
-  { icon: "🧸", title: "Цэцэрлэг",                    sub: "Хүүхдэд ээлтэй",               c: MUSTARD, dir: "kindergarten" },
-  { icon: "🛍️", title: "Худалдаа үйлчилгээ",          sub: "1 давхрын нэгж",               c: GREEN,   dir: "retail" },
+  { iconSrc: "/assets/nemelt/icon1.png",  title: "Хүүхдийн тоглоомын талбай", sub: "3–5 · 6–8 · 8–12 насны ангилал", c: MUSTARD, dir: "playground" },
+  { iconSrc: "/assets/nemelt/icon2.png",  title: "3×3 сагсан бөмбөг",          sub: "Спортын талбай",               c: BLUE,    dir: "basketball" },
+  { iconSrc: "/assets/nemelt/icon4.png",  title: "Ногоон байгууламж",          sub: "AWT зүлэгжүүлэлт",              c: GREEN,   dir: "green" },
+  { iconSrc: "/assets/nemelt/icon 5.png", title: "Сургууль",                    sub: "Хороололд багтсан",            c: BLUE,    dir: "school" },
+  { iconSrc: "/assets/nemelt/icon1.png",  title: "Цэцэрлэг",                    sub: "Хүүхдэд ээлтэй",               c: MUSTARD, dir: "kindergarten" },
+  { iconSrc: "/assets/nemelt/icon3.png",  title: "Худалдаа үйлчилгээ",          sub: "1 давхрын нэгж",               c: GREEN,   dir: "retail" },
 ];
 
 // ── Дэд бүтэц ───────────────────────────────────────────────────────────────
 export const INFRA = [
-  { icon: "⚡", k: "Цахилгаан", v: "2 эх үүсвэр",  d: "Яармагийн дэд станцаас 2 км шугам — тасралтгүй.", c: GREEN },
-  { icon: "💧", k: "Цэвэр ус",  v: "100% PPR",     d: "Зэврэхгүй хуванцар хоолой, чанартай ус.",          c: BLUE },
-  { icon: "🌊", k: "Үерийн ус", v: "600 м далан",  d: "100 жилийн дундаж үерийг тооцсон хамгаалалт.",     c: MUSTARD },
+  { icon: "power", k: "Цахилгаан", v: "2 эх үүсвэр",  d: "Яармагийн дэд станцаас 2 км шугам — тасралтгүй.", c: GREEN },
+  { icon: "water", k: "Цэвэр ус",  v: "100% PPR",     d: "Зэврэхгүй хуванцар хоолой, чанартай ус.",          c: BLUE },
+  { icon: "flood", k: "Үерийн ус", v: "600 м далан",  d: "100 жилийн дундаж үерийг тооцсон хамгаалалт.",     c: MUSTARD },
 ];
 export const BRANDS = [
-  { k: "DemirDöküm / Universal", d: "Радиатор" },
-  { k: "Egger",          d: "Паркет" },
-  { k: "VEKA / Firatpen",d: "Цонх" },
-  { k: "Torex",          d: "Гадна хаалга" },
+  { k: "DemirDöküm / Universal", d: "Радиатор", detail: "/assets/nemelt/persentation5.jpg" },
+  { k: "Egger",          d: "Паркет", detail: "/assets/nemelt/persentation5.jpg" },
+  { k: "VEKA / Firatpen",d: "Цонх", detail: "/assets/nemelt/persentation6.jpg" },
+  { k: "Torex",          d: "Гадна хаалга", detail: "/assets/nemelt/persentation5.jpg" },
   { k: "Legrand",        d: "Цахилгаан" },
   { k: "LX Hausys",      d: "Шалны трап" },
-  { k: "TOTO / Grohe / INAX / LIXIL", d: "Ариун цэврийн тоног" },
+  { k: "TOTO / Grohe / INAX / LIXIL", d: "Ариун цэврийн тоног", detail: "/assets/nemelt/persentation6.jpg" },
+  { k: "SOHO",           d: "Ханын цаас", detail: "/assets/nemelt/persentation6.jpg" },
 ];
 
 // ── Showroom / танилцуулга зургууд ──────────────────────────────────────────
@@ -160,4 +160,5 @@ export const SALES = [
   { name: "Р. Чанцалдулам", role: "Борлуулалтын менежер",       img: "/assets/salers/Sales-03.webp",    phone: "7575-8000", c: BLUE },
   { name: "О. Номин",       role: "Борлуулалтын менежер",       img: "/assets/salers/nomin-sales.webp", phone: "7575-8000", c: GREEN },
   { name: "М. Хонгорзул",   role: "Борлуулалтын менежер",       img: "/assets/salers/sales-4.webp",     phone: "7575-8000", c: BLUE },
+  { name: "С. Бархүү",      role: "Борлуулалтын менежер",       img: "/assets/salers/barhuu.png",       phone: "7575-8000", c: MUSTARD },
 ];

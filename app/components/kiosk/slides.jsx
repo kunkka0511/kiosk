@@ -8,6 +8,13 @@
 // ============================================================================
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode, Keyboard, Navigation, Zoom } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/navigation";
+import "swiper/css/zoom";
+import gallery from "./gallery.module.css";
 import {
   GREEN, BLUE, MUSTARD, CHARCOAL, OFFWHITE, SAND, DARK,
   FONT_HEAD, FONT_BRAND, FONT_BODY, FONT_ACCENT,
@@ -87,35 +94,10 @@ function GlassPad({ children }) {
 // ── 4. БАРИЛГЫН ЯВЦ (construction progress, ард shader) ──────────────────────
 // Зургуудыг /assets/toim/ folder-аас (API) дуудна. Folder-т зураг хийхэд л харагдана.
 // Файлын нэр "2025.03 …" хэлбэртэй бол огноо/тайлбар badge гарч ирнэ; үгүй бол зүгээр зураг.
-// ApeChain маягийн 3D coverflow — голын карт том, хажуугийнх rotateY-ээр ар тал руу эргэнэ.
-function coverOffset(index, current, total) {
-  const raw = index - current;
-  const half = total / 2;
-  if (raw > half) return raw - total;
-  if (raw < -half) return raw + total;
-  return raw;
-}
-
-function coverPose(offset) {
-  const side = Math.sign(offset);
-  const dist = Math.abs(offset);
-  if (offset === 0) {
-    return { x: "0%", rotateY: -7, z: 0, scale: 1, opacity: 1, zIndex: 40, filter: "brightness(1)" };
-  }
-  if (dist > 2) {
-    return { x: `${side * 118}%`, rotateY: -side * 52, z: -560, scale: 0.62, opacity: 0, zIndex: 10, filter: "brightness(0.3)" };
-  }
-  const x = dist === 1 ? side * 58 : side * 96;
-  const rotY = -side * (dist === 1 ? 42 : 50);
-  const z = dist === 1 ? -210 : -400;
-  const scale = dist === 1 ? 0.85 : 0.72;
-  const bright = dist === 1 ? 0.55 : 0.38;
-  return { x: `${x}%`, rotateY: rotY, z, scale, opacity: 1, zIndex: 40 - dist, filter: `brightness(${bright})` };
-}
-
 function SlideConstruction({ reduced }) {
   const [items, setItems] = useState(CONSTRUCTION); // эхлэл/fallback
   const [i, setI] = useState(CONSTRUCTION.length - 1);
+  const [mainSwiper, setMainSwiper] = useState(null);
 
   useEffect(() => {
     let alive = true;
@@ -124,24 +106,6 @@ function SlideConstruction({ reduced }) {
     }).catch(() => {});
     return () => { alive = false; };
   }, []);
-
-  const total = items.length || 1;
-  const go = (step) => { tick(); setI((v) => (v + step + total) % total); };
-
-  // зөөлөн авто-эргэлт — гар хүрэх/солих бүрт дахин эхэлнэ (5с)
-  useEffect(() => {
-    if (reduced || total <= 1) return;
-    const t = setTimeout(() => setI((v) => (v + 1) % total), 5000);
-    return () => clearTimeout(t);
-  }, [i, total, reduced]);
-
-  const navBtn = {
-    width: "clamp(56px,4.4vw,72px)", height: "clamp(56px,4.4vw,72px)", borderRadius: "50%",
-    border: "2px solid transparent", cursor: "pointer", display: "grid", placeItems: "center",
-    color: "#fff", fontSize: "clamp(22px,1.8vw,30px)", lineHeight: 1,
-    background: "linear-gradient(#0c2018,#0c2018) padding-box, linear-gradient(135deg," + MUSTARD + "," + BLUE + "," + GREEN + ") border-box",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.28)",
-  };
 
   return (
     <GlassPad>
@@ -155,86 +119,43 @@ function SlideConstruction({ reduced }) {
       <SlideDecor reduced tone="light" />
       <Heading kicker="Барилгын явц" kickerColor={MUSTARD} reduced={reduced}>Ажлын явцын тойм</Heading>
 
-      {/* 3D coverflow тайз */}
-      <div style={{ flex: 1, minHeight: 0, position: "relative", margin: "-2vh -7vw 0" }}>
-        <motion.div
-          drag={reduced ? false : "x"}
-          dragDirectionLock
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.3}
-          dragMomentum={false}
-          onDragEnd={(_e, info) => {
-            const power = info.offset.x + info.velocity.x * 0.22;
-            if (power < -70) go(1);
-            else if (power > 70) go(-1);
-          }}
-          style={{ position: "absolute", inset: 0, touchAction: "pan-y" }}>
-          {items.map((c, k) => {
-            const offset = coverOffset(k, i, total);
-            const pose = coverPose(offset);
-            const isActive = offset === 0;
-            return (
-              <motion.button key={c.src || k} onClick={() => setI(k)}
-                aria-label={c.label || c.date || `Зураг ${k + 1}`}
-                whileTap={isActive ? { scale: 0.99 } : {}}
-                animate={reduced
-                  ? { x: pose.x, rotateY: 0, z: 0, scale: isActive ? 1 : 0.8, opacity: Math.abs(offset) > 1 ? 0 : 1, zIndex: pose.zIndex, filter: pose.filter }
-                  : pose}
-                transition={SPRING_SOFT}
-                style={{ position: "absolute", inset: 0, margin: "auto",
-                  width: "min(48vw,880px)", height: "min(54vh,560px)",
-                  transformPerspective: 1500, transformOrigin: "center center",
-                  zIndex: pose.zIndex, padding: 0, border: "none", cursor: "pointer",
-                  borderRadius: 22, overflow: "hidden", background: "#0c1410",
-                  boxShadow: isActive ? "0 40px 110px rgba(0,0,0,0.42)" : "0 24px 64px rgba(0,0,0,0.3)",
-                  outline: "1px solid rgba(255,255,255,0.08)" }}>
-                <Media src={c.src} grad={c.grad} fit="cover" reduced={reduced} />
-                <div style={{ position: "absolute", inset: 0, pointerEvents: "none", background: isActive
-                  ? "linear-gradient(to top, rgba(8,16,11,0.82) 0%, rgba(8,16,11,0.18) 40%, transparent 68%)"
-                  : "rgba(4,8,6,0.32)" }} />
-                {/* идэвхтэй карт дээр л date + label overlay (ApeChain маягаар доод-зүүн) */}
-                {isActive && (c.date || c.label) && (
-                  <div style={{ position: "absolute", left: "clamp(24px,2.4vw,40px)", right: 24, bottom: "clamp(24px,3vh,40px)",
-                    textAlign: "left", color: "#fff" }}>
-                    {c.date && (
-                      <span style={{ display: "inline-block", background: MUSTARD, color: CHARCOAL,
-                        padding: "8px 18px", borderRadius: 30, fontFamily: FONT_BRAND, fontWeight: 900,
-                        fontSize: "clamp(15px,1.25vw,24px)", marginBottom: 14, letterSpacing: "0.02em" }}>{c.date}</span>
-                    )}
-                    {c.label && (
-                      <div style={{ fontFamily: FONT_HEAD, fontSize: "clamp(28px,3.4vw,60px)", fontWeight: 800,
-                        lineHeight: 1.02, textShadow: "0 4px 24px rgba(0,0,0,0.5)" }}>{c.label}</div>
-                    )}
-                  </div>
-                )}
-              </motion.button>
-            );
-          })}
-        </motion.div>
+      <div className={gallery.shell} onPointerDown={(e) => e.stopPropagation()}>
+        <Swiper key={`main-${items.length}`} className={gallery.main}
+          modules={[Keyboard, Navigation, Zoom]} navigation keyboard={{ enabled: true }}
+          zoom={{ maxRatio: 3 }} nested speed={420} initialSlide={Math.max(0, items.length - 1)}
+          onSwiper={setMainSwiper}
+          onSlideChange={(swiper) => { tick(); setI(swiper.activeIndex); }}>
+          {items.map((c, k) => (
+            <SwiperSlide key={c.src || k} className={gallery.mainSlide}>
+              <div className="swiper-zoom-container">
+                <img src={c.src} alt={c.label || c.date || `Барилгын явцын зураг ${k + 1}`} />
+              </div>
+              {(c.date || c.label) && (
+                <div className={gallery.caption}>
+                  {c.date && <span>{c.date}</span>}
+                  {c.label && <strong>{c.label}</strong>}
+                </div>
+              )}
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
-        {/* stacked дугуй nav товч — баруун ирмэг (ApeChain маягаар) */}
-        <div style={{ position: "absolute", right: "2.5vw", top: "50%", transform: "translateY(-50%)", zIndex: 60,
-          display: "flex", flexDirection: "column", gap: 16 }}>
-          <button onClick={() => go(1)} aria-label="Дараагийн зураг" style={navBtn}>›</button>
-          <button onClick={() => go(-1)} aria-label="Өмнөх зураг" style={navBtn}>‹</button>
+        <div className={gallery.meta}>
+          <span>{i + 1} / {items.length}</span>
+          <span>Зургийг чирж солино · Давхар товшиж томруулна</span>
         </div>
-      </div>
 
-      {/* thumbnail зурвас — доор (огноо байвал огноо, үгүй бол дугаар) */}
-      <div style={{ display: "flex", gap: 12, marginTop: 14, justifyContent: "center", alignItems: "center", flexWrap: "nowrap", overflow: "hidden" }}>
-        {items.map((c, k) => (
-          <motion.button key={c.src || k} onClick={() => setI(k)} whileTap={{ scale: 0.94 }}
-            aria-label={c.date || `Зураг ${k + 1}`}
-            animate={{ opacity: k === i ? 1 : 0.55 }}
-            style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, cursor: "pointer", border: "none", background: "transparent", flex: "0 0 auto" }}>
-            <div style={{ width: "clamp(96px,7vw,140px)", aspectRatio: "16/9", borderRadius: 10, overflow: "hidden",
-              border: k === i ? `3px solid ${MUSTARD}` : "2px solid rgba(0,0,0,0.12)",
-              boxShadow: k === i ? "0 6px 18px rgba(0,0,0,0.2)" : "none", transition: "border 0.25s" }}>
-              <Media src={c.src} grad={c.grad} fit="cover" reduced={reduced} />
-            </div>
-            <span style={{ fontSize: "clamp(12px,0.9vw,16px)", fontWeight: 700, color: k === i ? CHARCOAL : "#9aa39c" }}>{c.date || `${k + 1}`}</span>
-          </motion.button>
-        ))}
+        <Swiper key={`thumbs-${items.length}`} className={gallery.thumbs}
+          modules={[FreeMode]} freeMode watchSlidesProgress nested
+          slidesPerView="auto" spaceBetween={12}>
+          {items.map((c, k) => (
+            <SwiperSlide key={c.src || k} onClick={() => mainSwiper?.slideTo(k)}
+              className={`${gallery.thumbSlide} ${k === i ? gallery.thumbActive : ""}`}>
+              <img src={c.src} alt="" aria-hidden="true" />
+              <span>{c.date || `${k + 1}`}</span>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </GlassPad>
   );
@@ -390,7 +311,26 @@ function Round({ children, onClick }) {
 }
 
 // ── 6. INFRASTRUCTURE ────────────────────────────────────────────────────────
+function InfraIcon({ type, color }) {
+  if (type === "power") return (
+    <svg aria-hidden="true" viewBox="0 0 48 48" style={{ width: 52, height: 52, display: "block", color }}>
+      <path fill="currentColor" d="M27.8 3 9 27h12.2L18 45l21-27H26.5L27.8 3Z" />
+    </svg>
+  );
+  if (type === "water") return (
+    <svg aria-hidden="true" viewBox="0 0 48 48" style={{ width: 52, height: 52, display: "block", color }}>
+      <path fill="currentColor" d="M24 3S10 20.3 10 30a14 14 0 0 0 28 0C38 20.3 24 3 24 3Zm0 35.5a8.5 8.5 0 0 1-8.5-8.5c0-1.4.6-3.2 1.6-5.1.4 6.3 4.1 10 10.9 11.3a8.4 8.4 0 0 1-4 2.3Z" />
+    </svg>
+  );
+  return (
+    <svg aria-hidden="true" viewBox="0 0 48 48" style={{ width: 52, height: 52, display: "block", color }}>
+      <path fill="currentColor" d="M5 18c5.2 0 5.2-4 10.4-4s5.2 4 10.4 4 5.2-4 10.4-4c3.1 0 4.4 1.4 6.8 2.6v7.1c-2.4-1.2-3.7-2.6-6.8-2.6-5.2 0-5.2 4-10.4 4s-5.2-4-10.4-4S10.2 25.1 5 25.1V18Zm0 13c5.2 0 5.2-4 10.4-4s5.2 4 10.4 4 5.2-4 10.4-4c3.1 0 4.4 1.4 6.8 2.6v7.1c-2.4-1.2-3.7-2.6-6.8-2.6-5.2 0-5.2 4-10.4 4s-5.2-4-10.4-4S10.2 38.1 5 38.1V31Z" />
+    </svg>
+  );
+}
+
 function SlideInfra({ reduced }) {
+  const [material, setMaterial] = useState(null);
   return (
     <SlidePad bg={DARK}>
       <SlideDecor reduced={reduced} tone="dark" />
@@ -398,7 +338,7 @@ function SlideInfra({ reduced }) {
       <div style={{ position: "relative", display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "clamp(24px,2.4vw,44px)" }}>
         {INFRA.map((it, i) => (
           <motion.div key={i} initial={{ opacity: 0, y: reduced ? 0 : 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 + i * 0.1 }} style={{ borderTop: `3px solid ${it.c}`, paddingTop: 24 }}>
-            <div style={{ fontSize: "clamp(38px,3.2vw,58px)", marginBottom: 12 }}>{it.icon}</div>
+            <div style={{ marginBottom: 12 }}><InfraIcon type={it.icon} color={it.c} /></div>
             <div style={{ fontSize: "clamp(14px,1vw,19px)", color: it.c, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 8, fontWeight: 700 }}>{it.k}</div>
             <div style={{ fontFamily: FONT_HEAD, fontSize: "clamp(30px,2.6vw,46px)", fontWeight: 700, color: "#fff", marginBottom: 14 }}>{it.v}</div>
             <p style={{ fontSize: "clamp(16px,1.2vw,22px)", color: "rgba(255,255,255,0.6)", lineHeight: 1.5, margin: 0 }}>{it.d}</p>
@@ -409,13 +349,44 @@ function SlideInfra({ reduced }) {
         <p style={{ fontSize: "clamp(14px,1vw,19px)", color: "rgba(255,255,255,0.5)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 20 }}>Материалын брэндүүд</p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(12px,1.2vw,24px)" }}>
           {BRANDS.map((b, i) => (
-            <div key={i} style={{ padding: "16px 24px", border: "1px solid rgba(255,255,255,0.18)", borderRadius: 12 }}>
-              <div style={{ fontFamily: FONT_BRAND, fontSize: "clamp(18px,1.4vw,26px)", fontWeight: 900, color: "#fff" }}>{b.k}</div>
+            <button key={i} type="button" disabled={!b.detail} onClick={() => b.detail && setMaterial(b)}
+              aria-label={b.detail ? `${b.d} дэлгэрэнгүй үзэх` : undefined}
+              style={{ padding: "13px 20px", border: `1px solid ${b.detail ? "rgba(254,178,10,0.58)" : "rgba(255,255,255,0.18)"}`,
+                borderRadius: 12, background: b.detail ? "rgba(254,178,10,0.07)" : "transparent", textAlign: "left",
+                cursor: b.detail ? "pointer" : "default", opacity: b.detail ? 1 : 0.68 }}>
+              <div style={{ fontFamily: FONT_BODY, fontSize: "clamp(16px,1.2vw,22px)", fontWeight: 600, letterSpacing: "-0.01em", color: "#fff" }}>{b.k}</div>
               <div style={{ fontSize: "clamp(13px,0.95vw,17px)", color: MUSTARD, marginTop: 4 }}>{b.d}</div>
-            </div>
+              {b.detail && <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginTop: 5 }}>дарж дэлгэрэнгүй үзэх</div>}
+            </button>
           ))}
         </div>
       </div>
+      <AnimatePresence>
+        {material && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setMaterial(null)}
+            style={{ position: "fixed", inset: 0, zIndex: 220, padding: "clamp(20px,3vw,48px)", background: "rgba(11,18,14,0.94)",
+              display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <motion.div initial={{ scale: 0.96, y: 18 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.97, y: 12 }}
+              onClick={(e) => e.stopPropagation()}
+              style={{ width: "min(94vw,1500px)", height: "min(88vh,850px)", display: "flex", flexDirection: "column",
+                background: "#fff", borderRadius: 20, overflow: "hidden", boxShadow: "0 34px 100px rgba(0,0,0,0.48)" }}>
+              <div style={{ minHeight: 72, padding: "12px 16px 12px 28px", display: "flex", alignItems: "center", justifyContent: "space-between",
+                borderBottom: "1px solid rgba(0,0,0,0.09)" }}>
+                <div>
+                  <div style={{ fontFamily: FONT_HEAD, fontWeight: 700, fontSize: "clamp(20px,1.7vw,30px)", color: CHARCOAL }}>{material.d}</div>
+                  <div style={{ fontSize: "clamp(13px,1vw,17px)", color: "#777", marginTop: 2 }}>{material.k}</div>
+                </div>
+                <button type="button" onClick={() => setMaterial(null)} aria-label="Материалын дэлгэрэнгүйг хаах"
+                  style={{ width: 52, height: 52, borderRadius: "50%", border: "none", background: CHARCOAL, color: "#fff",
+                    fontSize: 28, cursor: "pointer" }}>×</button>
+              </div>
+              <div style={{ flex: 1, minHeight: 0, background: OFFWHITE }}>
+                <Media src={material.detail} grad={["#f7f7f7", "#e9e9e9"]} fit="contain" bg={OFFWHITE} reduced={reduced} />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </SlidePad>
   );
 }
@@ -478,13 +449,8 @@ function SlideLocation({ reduced }) {
               {AMENITIES.map((a, k) => (
                 <button key={k} onClick={() => openCard(a, k)} aria-label={a.title}
                   style={{ display: "flex", alignItems: "center", gap: 9, padding: "9px 11px", borderRadius: 11, cursor: "pointer", background: "#fff", border: `2px solid ${a.c}22`, textAlign: "left", opacity: busy === k ? 0.55 : 1 }}>
-                  {a.logo ? (
-                    <span aria-hidden="true" style={{ width: "clamp(50px,4vw,72px)", height: "clamp(24px,2vw,34px)", flexShrink: 0,
-                      backgroundImage: `url(${a.logo})`, backgroundRepeat: "no-repeat", backgroundPosition: "center",
-                      backgroundSize: "125% 379%" }} />
-                  ) : (
-                    <span style={{ fontSize: "clamp(18px,1.4vw,24px)" }}>{a.icon}</span>
-                  )}
+                  <img src={a.iconSrc} alt="" aria-hidden="true"
+                    style={{ width: "clamp(24px,1.8vw,32px)", height: "clamp(24px,1.8vw,32px)", objectFit: "contain", flexShrink: 0 }} />
                   <span style={{ fontSize: "clamp(11px,0.9vw,15px)", fontWeight: 600, lineHeight: 1.15 }}>{a.title}</span>
                 </button>
               ))}
@@ -523,7 +489,7 @@ function SlideSales({ reduced }) {
         fontSize: "clamp(15px,1.15vw,21px)", color: "#666", lineHeight: 1.4 }}>
         Манай борлуулалтын менежерүүдтэй утсаар шууд холбогдон төслийн талаар дэлгэрэнгүй мэдээлэл аваарай.
       </p>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "clamp(16px,1.6vw,30px)",
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "clamp(12px,1.25vw,24px)",
         flex: 1, minHeight: 0, alignContent: "center" }}>
         {SALES.map((m, i) => (
           <motion.div key={i} initial={{ opacity: 0, y: reduced ? 0 : 28 }} animate={{ opacity: 1, y: 0 }}

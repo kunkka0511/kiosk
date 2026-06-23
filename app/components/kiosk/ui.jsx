@@ -230,7 +230,7 @@ export function BrandFooter() {
 export function SlidePad({ children, bg = OFFWHITE }) {
   return (
     <div style={{ position: "absolute", inset: 0, background: bg, overflow: "hidden",
-      padding: "clamp(64px,8vh,96px) 7vw clamp(56px,7vh,96px)", display: "flex", flexDirection: "column",
+      padding: "clamp(104px,11vh,126px) 7vw clamp(56px,7vh,96px)", display: "flex", flexDirection: "column",
       fontFamily: FONT_BODY }}>
       {children}
       <BrandFooter />
