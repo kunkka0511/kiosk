@@ -102,7 +102,7 @@ export const AMENITIES = [
   { icon: "🧒", title: "Хүүхдийн тоглоомын талбай", sub: "3–5 · 6–8 · 8–12 насны ангилал", c: MUSTARD, dir: "playground" },
   { icon: "🏀", title: "3×3 сагсан бөмбөг",          sub: "Спортын талбай",               c: BLUE,    dir: "basketball" },
   { icon: "🌳", title: "Ногоон байгууламж",          sub: "AWT зүлэгжүүлэлт",              c: GREEN,   dir: "green" },
-  { icon: "🦌", title: "AWT парк",                    sub: "Animal · Water · Tree",        c: GREEN,   dir: "awt-park" },
+  { icon: "🦌", logo: "/assets/logo/zoo-garden.png", title: "Zoo Garden парк", sub: "Animal Garden · II хэсэг", c: MUSTARD, dir: "awt-park" },
   { icon: "🏫", title: "Сургууль",                    sub: "Хороололд багтсан",            c: BLUE,    dir: "school" },
   { icon: "🧸", title: "Цэцэрлэг",                    sub: "Хүүхдэд ээлтэй",               c: MUSTARD, dir: "kindergarten" },
   { icon: "🛍️", title: "Худалдаа үйлчилгээ",          sub: "1 давхрын нэгж",               c: GREEN,   dir: "retail" },

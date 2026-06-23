@@ -478,7 +478,13 @@ function SlideLocation({ reduced }) {
               {AMENITIES.map((a, k) => (
                 <button key={k} onClick={() => openCard(a, k)} aria-label={a.title}
                   style={{ display: "flex", alignItems: "center", gap: 9, padding: "9px 11px", borderRadius: 11, cursor: "pointer", background: "#fff", border: `2px solid ${a.c}22`, textAlign: "left", opacity: busy === k ? 0.55 : 1 }}>
-                  <span style={{ fontSize: "clamp(18px,1.4vw,24px)" }}>{a.icon}</span>
+                  {a.logo ? (
+                    <span aria-hidden="true" style={{ width: "clamp(50px,4vw,72px)", height: "clamp(24px,2vw,34px)", flexShrink: 0,
+                      backgroundImage: `url(${a.logo})`, backgroundRepeat: "no-repeat", backgroundPosition: "center",
+                      backgroundSize: "125% 379%" }} />
+                  ) : (
+                    <span style={{ fontSize: "clamp(18px,1.4vw,24px)" }}>{a.icon}</span>
+                  )}
                   <span style={{ fontSize: "clamp(11px,0.9vw,15px)", fontWeight: 600, lineHeight: 1.15 }}>{a.title}</span>
                 </button>
               ))}
