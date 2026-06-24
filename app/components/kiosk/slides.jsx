@@ -19,7 +19,7 @@ import {
   GREEN, BLUE, MUSTARD, CHARCOAL, OFFWHITE, SAND, DARK,
   FONT_HEAD, FONT_BRAND, FONT_BODY, FONT_ACCENT,
   A, plan, PLAN_COUNTS, STATS, BLOCKS, BLOCK_NOTE,
-  AMENITIES, INFRA, BRANDS, NEARBY, SHOWROOM, CONSTRUCTION,
+  AMENITIES, INFRA, BRANDS, NEARBY, CONSTRUCTION,
   SPRING_SOFT, SALES,
 } from "./tokens";
 import { Media, HeroLotus, SlideDecor, BrandFooter, CountUp, Particles, Heading, SlidePad } from "./ui";
@@ -393,15 +393,24 @@ function SlideInfra({ reduced }) {
 
 // ── 7. БАЙРШИЛ + ОРЧИН + ТАНИЛЦУУЛГА (нэгтгэсэн нэг хуудас) ───────────────────
 function SlideLocation({ reduced }) {
-  const gallery = [
-    { src: A.renderFinal, cap: "Байршлын төлөвлөлт", grad: ["#9aa3b0", "#5a6a7e"] },
-    ...SHOWROOM,
-  ];
+  const [progress, setProgress] = useState(CONSTRUCTION);
+  const gallery = progress.map((item, index) => ({
+    ...item,
+    cap: item.label || item.date || `Барилгын явц ${index + 1}`,
+  }));
   const [i, setI] = useState(0);
   const [lb, setLb] = useState(null);     // { title, images }
   const [idx, setIdx] = useState(0);
   const [busy, setBusy] = useState(null);
   const count = lb?.images.length || 0;
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/toim").then((r) => r.json()).then((data) => {
+      if (alive && data.items?.length) setProgress(data.items);
+    }).catch(() => {});
+    return () => { alive = false; };
+  }, []);
+
   const openCard = async (a, k) => {
     setBusy(k);
     try {
@@ -429,7 +438,7 @@ function SlideLocation({ reduced }) {
               <div style={{ fontFamily: FONT_HEAD, fontSize: "clamp(19px,1.7vw,30px)", fontWeight: 700 }}>{gallery[i].cap}</div>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 10, overflow: "hidden" }}>
+          <div style={{ display: "flex", gap: 10, overflowX: "auto", overflowY: "hidden", touchAction: "pan-x", paddingBottom: 4 }}>
             {gallery.map((g, k) => (
               <button key={k} onClick={() => setI(k)} aria-label={g.cap}
                 style={{ flex: "0 0 auto", width: "clamp(78px,5.6vw,116px)", aspectRatio: "4/3", borderRadius: 10, overflow: "hidden", cursor: "pointer", padding: 0, background: "#fff", border: k === i ? `3px solid ${GREEN}` : "2px solid #0001" }}>
@@ -528,7 +537,6 @@ export const SLIDES = [
   { name: "Нүүр",               dark: true,  Comp: SlideHero },
   { name: "Тоон үзүүлэлт",      dark: false, Comp: SlideStats },
   { name: "Орон сууц",          dark: false, Comp: SlideUnits },          // ← давхрын хуваалт, 3-р хуудас
-  { name: "Барилгын явц",       dark: false, Comp: SlideConstruction },
   { name: "Ерөнхий төлөвлөгөө", dark: false, Comp: SlideMasterPlan },
   { name: "Дэд бүтэц",          dark: true,  Comp: SlideInfra },
   { name: "Байршил ба орчин",   dark: false, Comp: SlideLocation },        // ← Байршил + Орчин + Танилцуулга нэгтгэв
