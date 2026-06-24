@@ -1,0 +1,47 @@
+.viewport { position: fixed; inset: 0; overflow-y: auto; overscroll-behavior-y: contain; background: #e9eee9; color: #303632; user-select: text; }
+.phone { width: min(100%, 430px); min-height: 100%; margin: 0 auto; background: #fefbf6; box-shadow: 0 0 70px #25382924; }
+.hero { min-height: 670px; padding: 24px 22px 32px; display: flex; flex-direction: column; color: white; background: linear-gradient(180deg, #173b2b33, #173b2bea), url('/assets/images/fbouz.jpg') center/cover; }
+.logo { width: 88px; height: auto; filter: drop-shadow(0 4px 12px #0004); }
+.heroCopy { margin-top: auto; }
+.heroCopy > span, .eyebrow { color: #e7ad2b; font-size: 12px; font-weight: 800; letter-spacing: .18em; }
+.hero h1 { margin: 12px 0; font-family: 'Mogul Magistral', var(--font-inter), sans-serif; font-size: 44px; line-height: .98; letter-spacing: -.035em; }
+.hero p { color: #f4f7f3d9; font-size: 16px; line-height: 1.55; }
+.heroActions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 24px; }
+.heroActions button, .finalCta button, .submit, .success button { min-height: 50px; border: 0; border-radius: 15px; background: #feb20a; color: #273029; font-weight: 800; font-size: 15px; }
+.heroActions .secondary { color: white; background: #ffffff1b; border: 1px solid #ffffff66; backdrop-filter: blur(10px); }
+.section { padding: 54px 22px; }
+.section h2, .finalCta h2, .formCard h2 { margin: 8px 0 24px; font-family: 'Mogul Magistral', var(--font-inter), sans-serif; font-size: 30px; line-height: 1.08; color: #374039; }
+.highlightGrid { display: grid; gap: 10px; }
+.highlightGrid article { display: flex; align-items: center; gap: 13px; padding: 15px; border: 1px solid #3f8e4930; border-radius: 15px; background: #fff; box-shadow: 0 8px 25px #24402a0c; }
+.highlightGrid span { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: #eef7ed; font-size: 20px; }
+.highlightGrid strong { font-size: 14px; line-height: 1.3; }
+.gallerySection { padding-left: 0; padding-right: 0; background: #eff5ef; }
+.gallerySection > h2, .gallerySection > .eyebrow { margin-left: 22px; margin-right: 22px; }
+.gallery { display: flex; gap: 12px; padding: 0 22px 8px; overflow-x: auto; scroll-snap-type: x mandatory; }
+.gallery img { flex: 0 0 84%; width: 84%; height: 260px; object-fit: cover; border-radius: 18px; scroll-snap-align: center; box-shadow: 0 16px 35px #1b3d2740; }
+.section h3 { margin: 20px 0 10px; font-size: 13px; color: #6b746e; text-transform: uppercase; letter-spacing: .1em; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips button { padding: 11px 14px; border: 1px solid #d8dfd8; border-radius: 999px; background: #fff; color: #475149; font-weight: 650; }
+.chips .activeChip { border-color: #429547; color: #236a2c; background: #e9f5e8; box-shadow: inset 0 0 0 1px #429547; }
+.finalCta { margin: 0 16px 44px; padding: 34px 24px; border-radius: 24px; background: #173b2b; color: white; }
+.finalCta h2 { margin-top: 0; color: white; }
+.finalCta p { margin-bottom: 22px; color: #e0eae3; line-height: 1.55; }
+.finalCta button { width: 100%; }
+.phone footer { padding: 22px; text-align: center; background: #102a1e; color: #dbe7de; font-size: 13px; }
+.modal { position: fixed; inset: 0; z-index: 999; display: flex; align-items: flex-end; justify-content: center; padding-top: 36px; background: #102118b8; backdrop-filter: blur(8px); }
+.formCard { position: relative; width: min(100%, 430px); max-height: calc(100dvh - 36px); overflow-y: auto; padding: 30px 22px 36px; border-radius: 26px 26px 0 0; background: #fefbf6; box-shadow: 0 -20px 60px #0004; }
+.close { position: absolute; top: 15px; right: 15px; width: 40px; height: 40px; border: 0; border-radius: 50%; background: #e9eee9; color: #34443a; font-size: 26px; }
+.formCard form { display: flex; flex-direction: column; }
+.formCard label { margin: 13px 0 6px; color: #465049; font-size: 13px; font-weight: 700; }
+.formCard input, .formCard select, .formCard textarea { width: 100%; min-height: 47px; padding: 11px 12px; border: 1px solid #ccd6ce; border-radius: 12px; background: #fff; color: #263129; font: inherit; user-select: text; }
+.formCard textarea { resize: vertical; }
+.formCard input[aria-invalid='true'] { border-color: #c43d32; }
+.formCard small, .formError { margin-top: 5px; color: #b52d24; font-size: 12px; }
+.formRow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.submit { margin-top: 22px; width: 100%; }
+.submit:disabled { opacity: .6; }
+.success { padding: 42px 4px 16px; text-align: center; }
+.success > span { display: grid; place-items: center; width: 64px; height: 64px; margin: 0 auto 18px; border-radius: 50%; background: #429547; color: white; font-size: 32px; }
+.success p { margin-bottom: 24px; color: #667068; line-height: 1.55; }
+.success button { width: 100%; }
+@media (min-width: 700px) { .viewport { padding: 24px 0; } .phone { border-radius: 28px; overflow: hidden; } }

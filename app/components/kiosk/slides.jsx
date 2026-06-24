@@ -24,6 +24,7 @@ import {
 } from "./tokens";
 import { Media, HeroLotus, SlideDecor, BrandFooter, CountUp, Particles, Heading, SlidePad } from "./ui";
 import { tick } from "./feedback";
+import MobileQrCard from "./MobileQrCard";
 
 // ── 1. HERO ──────────────────────────────────────────────────────────────────
 function SlideHero({ reduced }) {
@@ -498,7 +499,7 @@ function SlideSales({ reduced }) {
         fontSize: "clamp(15px,1.15vw,21px)", color: "#666", lineHeight: 1.4 }}>
         Манай борлуулалтын менежерүүдтэй утсаар шууд холбогдон төслийн талаар дэлгэрэнгүй мэдээлэл аваарай.
       </p>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "clamp(12px,1.25vw,24px)",
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "clamp(10px,1vw,18px)",
         flex: 1, minHeight: 0, alignContent: "center" }}>
         {SALES.map((m, i) => (
           <motion.div key={i} initial={{ opacity: 0, y: reduced ? 0 : 28 }} animate={{ opacity: 1, y: 0 }}
@@ -507,7 +508,7 @@ function SlideSales({ reduced }) {
               boxShadow: "0 14px 44px rgba(0,0,0,0.09)", padding: "clamp(20px,2.6vh,36px) clamp(14px,1.4vw,24px)",
               display: "flex", flexDirection: "column", alignItems: "center", gap: "clamp(14px,1.8vh,22px)" }}>
             {/* зураг — брэнд өнгийн дугуй дэвсгэр дээр */}
-            <div style={{ width: "clamp(120px,9vw,178px)", aspectRatio: "1", borderRadius: "50%",
+            <div style={{ width: "clamp(90px,7vw,150px)", aspectRatio: "1", borderRadius: "50%",
               overflow: "hidden", background: m.c, flexShrink: 0 }}>
               <Media src={m.img} grad={[m.c, m.c]} bg={m.c} fit="cover" reduced={reduced} />
             </div>
@@ -520,13 +521,14 @@ function SlideSales({ reduced }) {
             {/* утасны дугаар (Холбогдох товчны оронд) */}
             <a href={`tel:${m.phone.replace(/[^0-9+]/g, "")}`}
               style={{ marginTop: "auto", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 10,
-                padding: "12px clamp(20px,1.6vw,30px)", borderRadius: 30, border: `2px solid ${MUSTARD}`,
-                color: CHARCOAL, fontFamily: FONT_BRAND, fontWeight: 800, fontSize: "clamp(16px,1.2vw,23px)",
+                padding: "10px clamp(12px,1vw,20px)", borderRadius: 30, border: `2px solid ${MUSTARD}`,
+                color: CHARCOAL, fontFamily: FONT_BRAND, fontWeight: 800, fontSize: "clamp(14px,1vw,20px)",
                 letterSpacing: "0.02em", whiteSpace: "nowrap" }}>
               <span aria-hidden="true">📞</span> {m.phone}
             </a>
           </motion.div>
         ))}
+        <MobileQrCard />
       </div>
     </SlidePad>
   );
